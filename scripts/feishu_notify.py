@@ -22,8 +22,8 @@ from datetime import datetime
 
 # ── 配置 ──────────────────────────────────────────────
 GITHUB_PAGES_URL = "https://garyreni.github.io/stock-analysis"
-REPO_DIR = "D:/AI/a-stock-analysis"
-DOCS_DIR = "D:/AI/a-stock-analysis/docs"
+REPO_DIR = "D:/AI/股票分析/stock-analysis"
+DOCS_DIR = "D:/AI/股票分析/stock-analysis/docs"
 
 
 def _deploy_to_github_pages(html_path: str) -> str:
