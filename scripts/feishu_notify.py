@@ -42,15 +42,21 @@ def _deploy_to_github_pages(html_path: str) -> str:
         index_path = os.path.join(DOCS_DIR, "index.html")
         shutil.copy2(html_path, index_path)
 
-        # 4. git add + commit + push
+        # 4. git add + commit + push（有变更才 commit）
         subprocess.run(
             ["git", "add", "docs/"],
             cwd=REPO_DIR, check=True, capture_output=True,
         )
-        subprocess.run(
-            ["git", "commit", "-m", f"update: {html_name}"],
-            cwd=REPO_DIR, check=True, capture_output=True,
+        # 检查是否有变更
+        diff_result = subprocess.run(
+            ["git", "diff", "--cached", "--quiet"],
+            cwd=REPO_DIR, capture_output=True,
         )
+        if diff_result.returncode != 0:
+            subprocess.run(
+                ["git", "commit", "-m", f"update: {html_name}"],
+                cwd=REPO_DIR, check=True, capture_output=True,
+            )
         subprocess.run(
             ["git", "push"],
             cwd=REPO_DIR, check=True, capture_output=True, timeout=30,
