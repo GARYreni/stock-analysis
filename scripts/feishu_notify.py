@@ -42,12 +42,11 @@ def _deploy_to_github_pages(html_path: str) -> str:
         index_path = os.path.join(DOCS_DIR, "index.html")
         shutil.copy2(html_path, index_path)
 
-        # 4. git add + commit + push（有变更才 commit）
+        # 4. git add + commit
         subprocess.run(
             ["git", "add", "docs/"],
             cwd=REPO_DIR, check=True, capture_output=True,
         )
-        # 检查是否有变更
         diff_result = subprocess.run(
             ["git", "diff", "--cached", "--quiet"],
             cwd=REPO_DIR, capture_output=True,
@@ -57,18 +56,56 @@ def _deploy_to_github_pages(html_path: str) -> str:
                 ["git", "commit", "-m", f"update: {html_name}"],
                 cwd=REPO_DIR, check=True, capture_output=True,
             )
-        subprocess.run(
-            ["git", "push"],
-            cwd=REPO_DIR, check=True, capture_output=True, timeout=30,
-        )
 
-        # GitHub Pages 有短暂延迟，URL 约 30 秒后生效
-        url = f"{GITHUB_PAGES_URL}/{html_name}"
-        print(f"  [部署] ✅ 已推送到 GitHub Pages: {url}")
-        return url
+        # 5. push — 优先走 gh CLI（已认证），失败回退到 git push（带代理）
+        push_ok = False
+        # 方案A: gh CLI
+        try:
+            result = subprocess.run(
+                ["gh", "repo", "sync"],
+                cwd=REPO_DIR, capture_output=True, timeout=60,
+            )
+            if result.returncode == 0:
+                push_ok = True
+        except:
+            pass
+        # 方案B: git push with proxy
+        if not push_ok:
+            try:
+                result = subprocess.run(
+                    ["git", "-c", "http.proxy=http://127.0.0.1:7897",
+                     "-c", "https.proxy=http://127.0.0.1:7897",
+                     "push"],
+                    cwd=REPO_DIR, capture_output=True, timeout=60,
+                )
+                if result.returncode == 0:
+                    push_ok = True
+                else:
+                    stderr = result.stderr.decode(errors="replace") if result.stderr else ""
+                    print(f"  [部署] git push 失败: {stderr[:200]}")
+            except Exception as e:
+                print(f"  [部署] git push 异常: {e}")
+        # 方案C: 无代理直连
+        if not push_ok:
+            try:
+                result = subprocess.run(
+                    ["git", "push"],
+                    cwd=REPO_DIR, capture_output=True, timeout=30,
+                )
+                if result.returncode == 0:
+                    push_ok = True
+            except:
+                pass
+
+        if push_ok:
+            url = f"{GITHUB_PAGES_URL}/{html_name}"
+            print(f"  [部署] ✅ 已推送到 GitHub Pages: {url}")
+            return url
+        else:
+            print(f"  [部署] ⚠️ 所有推送方式均失败，跳过部署")
+            return ""
 
     except Exception as e:
-        # 部署失败不阻塞主流程
         print(f"  [部署] 推送失败: {e}")
         return ""
 
