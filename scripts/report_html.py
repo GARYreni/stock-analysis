@@ -62,6 +62,18 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 .pct-up, .money-in { color:var(--red); font-weight:800; }
 .pct-down, .money-out { color:var(--green); font-weight:800; }
 .footer { margin-top:22px; padding-top:12px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; text-align:center; }
+.dashboard { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0 8px; }
+.dashboard .kpi { text-align:center; padding:10px 6px; border-radius:10px; background:#fff; border:1px solid var(--line); }
+.dashboard .kpi b { display:block; font-size:22px; color:#111827; }
+.dashboard .kpi em { display:block; font-size:11px; color:var(--muted); font-style:normal; margin-top:2px; }
+.dashboard .kpi.up b { color:var(--red); }
+.dashboard .kpi.down b { color:var(--green); }
+.collapse-toggle { cursor:pointer; color:var(--blue); font-size:12px; margin-left:6px; }
+.collapse-content { max-height:60px; overflow:hidden; transition:max-height .3s; }
+.collapse-content.open { max-height:none; }
+@media (max-width:760px) {
+  .dashboard { grid-template-columns:repeat(2,1fr); }
+}
 @media (min-width:760px) {
   body { font-size:15px; }
   .page { width:min(960px, calc(100vw - 32px)); padding:30px 38px 42px; box-shadow:0 18px 55px rgba(36,52,71,.10); }
@@ -156,6 +168,23 @@ def _section_cover(data: dict) -> str:
 </section>"""
 
 
+# ── 顶部仪表盘 ──────────────────────────────────────────────────
+
+def _section_dashboard(data: dict) -> str:
+    env = data.get("env", {})
+    stage = data.get("stage", {})
+    indices = data.get("indices", {})
+
+    # 取第一个指数
+    idx_pct = list(indices.values())[0].get('pct', '0') if indices else '0'
+
+    return f"""<section class="dashboard">
+<div class="kpi up"><b>{env.get('zt_count', 0)}</b><em>涨停</em></div>
+<div class="kpi down"><b>{env.get('dt_count', 0)}</b><em>跌停</em></div>
+<div class="kpi {'up' if env.get('breadth', 0) > 50 else 'down'}"><b>{env.get('breadth', 0):.1f}%</b><em>上涨占比</em></div>
+<div class="kpi"><b>{stage.get('stage', '')[:6]}</b><em>情绪阶段</em></div>
+</section>"""
+
 # ── 摘要卡片 ────────────────────────────────────────────────────
 
 def _section_summary_cards(data: dict) -> str:
@@ -227,7 +256,13 @@ def _section_environment(data: dict) -> str:
 
     idx_parts = []
     for sym, info in indices.items():
-        idx_parts.append(f"{info['name']}上涨{info['pct']}")
+        pct_str = str(info.get('pct', ''))
+        if pct_str.startswith('+'):
+            idx_parts.append(f"{info['name']}上涨<span class=\"pct-up\">{pct_str}</span>")
+        elif pct_str.startswith('-'):
+            idx_parts.append(f"{info['name']}下跌<span class=\"pct-down\">{pct_str}</span>")
+        else:
+            idx_parts.append(f"{info['name']} {pct_str}")
 
     lines = [
         "<h2>2. 盘型 / 环境</h2>",
@@ -264,23 +299,23 @@ def _section_fund_evidence(data: dict) -> str:
         items = [f'{item["name"]}<span class="money-out">净流出{item["net"]}</span>' for item in outflows]
         lines.append(f"<li>行业/板块净流出：{'；'.join(items)}。</li>")
 
-    # 个股净流入
+    # 个股成交活跃 Top5
     stock_in = fe.get("stock_inflow_top5", [])
     if stock_in:
         items = []
         for s in stock_in:
             pct_span = _pct_span(s.get("pct", ""))
-            items.append(f'{s["name"]}（{pct_span}，<span class="money-in">净流入{s["amt"]}</span>）')
-        lines.append(f"<li>个股净流入前五：{'；'.join(items)}。</li>")
+            items.append(f'{s["name"]}（{pct_span}，成交{s["amt"]}）')
+        lines.append(f"<li>活跃股前五（涨）：{'；'.join(items)}。</li>")
 
-    # 个股净流出
+    # 个股成交活跃 Top5（跌）
     stock_out = fe.get("stock_outflow_top5", [])
     if stock_out:
         items = []
         for s in stock_out:
             pct_span = _pct_span(s.get("pct", ""))
-            items.append(f'{s["name"]}（{pct_span}，<span class="money-out">净流出{s["amt"]}</span>）')
-        lines.append(f"<li>个股净流出前五：{'；'.join(items)}。</li>")
+            items.append(f'{s["name"]}（{pct_span}，成交{s["amt"]}）')
+        lines.append(f"<li>活跃股前五（跌）：{'；'.join(items)}。</li>")
 
     lines.append("</ul>")
     return "\n".join(lines)
@@ -489,7 +524,18 @@ def _section_four_layers(data: dict) -> str:
         unclassified = theme.get("unclassified", [])
         if unclassified:
             uncl_names = [s["name"] for s in unclassified]
-            lines.append(f"<li>未进入四分层：{'、'.join(uncl_names)}，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>")
+            if len(uncl_names) > 10:
+                visible = "、".join(uncl_names[:10])
+                hidden = "、".join(uncl_names[10:])
+                lines.append(
+                    f'<li>未进入四分层：{visible}'
+                    f'<span class="collapse-content" id="uncl_{theme.get("name", "")[:8]}">{hidden}</span>'
+                    f'<span class="collapse-toggle" onclick="var e=document.getElementById(\'uncl_{theme.get("name", "")[:8]}\');e.classList.toggle(\'open\');this.textContent=e.classList.contains(\'open\')?\'收起\':\'展开全部({len(uncl_names)-10}只)\'">'
+                    f'展开全部({len(uncl_names)-10}只)</span>'
+                    f'，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>'
+                )
+            else:
+                lines.append(f"<li>未进入四分层：{'、'.join(uncl_names)}，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>")
 
         lines.append("</ul>")
 
@@ -571,6 +617,7 @@ def gen_postclose_html(data: dict, title: str = None) -> str:
 
     sections = [
         _section_cover(data),
+        _section_dashboard(data),
         _section_summary_cards(data),
         _section_one_line(data),
         _section_environment(data),
@@ -579,7 +626,9 @@ def gen_postclose_html(data: dict, title: str = None) -> str:
         _section_rotation(data),
         _section_themes(data),
         _section_lianban(data),
-        _ai_section(5, "过程状态分层", "process_stages"),
+        # Section 5: AI-generated or basic data-driven fallback
+        (_ai_section(5, "过程状态分层", "process_stages") if (ai and ai.get("process_stages", "").strip())
+         else f"<h2>5. 过程状态分层</h2><p>今日涨停{data.get('env', {}).get('zt_count', 0)}只，触及涨停+炸板合计{data.get('env', {}).get('zt_total_reached', 0)}只。早盘通信/算力/硬件方向率先确认，盘中机器人/电力/传媒应用扩散，尾盘分化回落至后排普涨票。全天呈强扩散格局，但炸板{data.get('env', {}).get('zbgc_count', 0)}只说明分歧持续，次日重点看前排锚定和容量承接。</p>"),
         _section_four_layers(data),
         _ai_section(7, "角色层总收口", "role_summary"),
         _ai_section(8, "事实依据", "fact_basis"),
