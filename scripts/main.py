@@ -130,6 +130,14 @@ except ImportError:
     AI_ANALYST_ENABLED = False
     print("  [WARN] ai_analyst.py 未找到，AI分析功能将不可用")
 
+# 飞书通知
+try:
+    from feishu_notify import send_postclose_to_feishu
+    FEISHU_ENABLED = True
+except ImportError:
+    FEISHU_ENABLED = False
+    print("  [WARN] feishu_notify.py 未找到，飞书通知功能将不可用")
+
 DESKTOP = "C:/Users/Gary/Desktop"
 
 
@@ -194,6 +202,7 @@ def main():
     parser.add_argument("--recommend",    action="store_true", help="荐股评分（多维度加权，选出最优机会票）")
     parser.add_argument("--postclose",    action="store_true", help="收盘复盘分析（HTML报告，可直接部署到Netlify）")
     parser.add_argument("--deepseek-key",  help="DeepSeek API Key（也可设置环境变量 DEEPSEEK_API_KEY）")
+    parser.add_argument("--feishu-webhook", help="飞书机器人 Webhook URL（也可设置环境变量 FEISHU_WEBHOOK_URL）")
     parser.add_argument("--no-ai",         action="store_true", help="跳过AI分析（仅输出数据，报告部分章节为占位符）")
     args = parser.parse_args()
 
@@ -331,6 +340,19 @@ def main():
         print("\n[2/2] 生成HTML报告...")
         html_path = save_postclose_report(review_data)
         print(f"\n  📄 HTML报告已生成: {html_path}")
+
+        # ── 飞书通知 ──────────────────────────
+        feishu_url = args.feishu_webhook or os.environ.get("FEISHU_WEBHOOK_URL", "")
+        if feishu_url and FEISHU_ENABLED:
+            print(f"\n  发送飞书通知...")
+            try:
+                send_postclose_to_feishu(html_path, review_data, webhook_url=feishu_url)
+            except Exception as e:
+                print(f"  [WARN] 飞书发送失败: {e}")
+        elif not feishu_url:
+            print(f"\n  [提示] 设置飞书 Webhook 后可将报告直接推送到手机")
+            print(f"    传参: --feishu-webhook https://open.feishu.cn/open-apis/bot/v2/hook/xxx")
+
         print(f"\n  ✅ 完成，总耗时 {time.time()-t_start:.1f}s")
         return
 
