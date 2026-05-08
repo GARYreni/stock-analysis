@@ -866,23 +866,27 @@ def _gen_charts(data: dict) -> str:
     }});
     outflowData.forEach(function(d) {{
       categories.push(d.name);
-      values.push(Math.abs(d.value));
+      values.push(d.value);
       colors.push('#27ae60');
     }});
 
+    var catRev = categories.slice().reverse();
+    var valRev = values.slice().reverse();
+    var colRev = colors.slice().reverse();
+
     chart.setOption({{
       title: {{ text: '板块资金流 TOP5', left: 'center', top: 8, textStyle: {{ fontSize: 15, color: '#1f2937' }} }},
-      tooltip: {{ trigger: 'axis', formatter: function(p) {{ return p[0].name + '<br/>' + (p[0].value >= 0 ? '净流入' : '净流出') + ': ' + Math.abs(p[0].value).toFixed(2) + '亿'; }} }},
+      tooltip: {{ trigger: 'axis', formatter: function(p) {{ var v = p[0].value; return p[0].name + '<br/>' + (v >= 0 ? '净流入: +' : '净流出: ') + Math.abs(v).toFixed(2) + '亿'; }} }},
       grid: {{ left: '3%', right: '8%', bottom: '3%', top: 50, containLabel: true }},
       xAxis: {{ type: 'value', name: '亿元', axisLabel: {{ fontSize: 11 }} }},
-      yAxis: {{ type: 'category', data: categories.reverse(), axisLabel: {{ fontSize: 11, width: 72, overflow: 'truncate' }}, inverse: true }},
+      yAxis: {{ type: 'category', data: catRev, axisLabel: {{ fontSize: 11, width: 72, overflow: 'truncate' }}, inverse: true }},
       series: [{{
         type: 'bar',
-        data: values.reverse().map(function(v, i) {{
-          return {{ value: v, itemStyle: {{ color: colors.reverse()[i], borderRadius: [0, 4, 4, 0] }} }};
+        data: valRev.map(function(v, i) {{
+          return {{ value: Math.abs(v), itemStyle: {{ color: colRev[i], borderRadius: [0, 4, 4, 0] }} }};
         }}),
         barMaxWidth: 24,
-        label: {{ show: true, position: 'right', fontSize: 11, formatter: function(p) {{ return (p.value).toFixed(1) + '亿'; }} }}
+        label: {{ show: true, position: 'right', fontSize: 11, formatter: function(p) {{ return Math.abs(p.value).toFixed(1) + '亿'; }} }}
       }}]
     }});
     window.addEventListener('resize', function() {{ chart.resize(); }});

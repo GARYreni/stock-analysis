@@ -988,9 +988,13 @@ def _analyze_connection_board(zt_df, realtime_df, industry_map, themes):
         if lb_count < 2:
             continue
 
-        code = _code_bare(row.get("code", ""))
-        name = str(row.get("名称", ""))
-        chg = _sf(row.get("涨跌幅(%)", row.get("涨跌幅", 0)))
+        # 使用 _safe_col 查找列名（与 _classify_themes 保持一致）
+        code_col_z = _safe_col(zt_df, "代码")
+        name_col_z = _safe_col(zt_df, "名称")
+        chg_col_z = _safe_col(zt_df, "涨跌幅(%)") or _safe_col(zt_df, "涨跌幅")
+        code = _code_bare(str(row.get(code_col_z, ""))) if code_col_z else ""
+        name = str(row.get(name_col_z, "")) if name_col_z else ""
+        chg = _sf(row.get(chg_col_z, 0)) if chg_col_z else 0
 
         # 从实时行情获取换手率
         turnover = None
@@ -999,11 +1003,13 @@ def _analyze_connection_board(zt_df, realtime_df, industry_map, themes):
             if code_col:
                 rt_df = realtime_df.copy()
                 rt_df["_code_bare"] = rt_df[code_col].astype(str).str[-6:]
-                match = rt_df[rt_df["_code_bare"] == _code_bare(code)]
+                match = rt_df[rt_df["_code_bare"] == code]
                 if not match.empty:
                     tr_col = _safe_col(realtime_df, "换手率(%)")
                     if tr_col:
-                        turnover = _sf(match.iloc[0].get(tr_col, 0))
+                        tr_val = match.iloc[0].get(tr_col)
+                        if tr_val is not None and not (isinstance(tr_val, float) and np.isnan(tr_val)):
+                            turnover = _sf(tr_val, 0)
 
         # 昨换手 + 换手变化判定
         prev_turnover = yesterday_turnover_map.get(code)

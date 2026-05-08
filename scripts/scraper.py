@@ -230,6 +230,8 @@ def fetch_batch_tx(symbols):
             mktcap = sf(parts[44])   # 总市值(亿)
             nmc    = sf(parts[45])   # 流通市值(亿)
             dt_str = parts[30] if len(parts) > 30 else ""
+            # 换手率 = 成交额 / 流通市值 * 100（流通市值覆盖率已达100%）
+            turnover = round(amt / (nmc * 1e8) * 100, 3) if amt > 0 and nmc > 0 else None
             # 过滤停牌/无效数据
             if cur <= 0 or amt <= 0:
                 continue
@@ -245,7 +247,7 @@ def fetch_batch_tx(symbols):
                 "涨跌额":      chg,
                 "成交量(手)":  vol,
                 "成交额(元)":  amt,
-                "换手率(%)":   round(amt / (nmc * 1e8) * 100, 3) if amt > 0 and nmc > 0 else None,
+                "换手率(%)":   turnover,
                 "市盈率TTM":   pe if pe and 0 < pe < 10000 else None,
                 "总市值(亿)":  round(mktcap, 2) if mktcap > 0 else None,
                 "流通市值(亿)":round(nmc, 2) if nmc > 0 else None,
