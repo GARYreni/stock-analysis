@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>2026-05-08 正式收盘复盘</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <style>
 :root {
   --paper:#fffdf8; --ink:#1f2937; --muted:#64748b; --line:#e5e0d6;
@@ -86,6 +87,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
   li { padding:7px 8px 7px 15px; font-size:13px; }
   p { font-size:13px; }
   .collapse-toggle { font-size:11px; }
+  .chart-row { grid-template-columns:1fr; }
 }
 @media (min-width:760px) {
   body { font-size:15px; }
@@ -123,6 +125,10 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <div class="kpi down"><b>2</b><em>跌停</em></div>
 <div class="kpi up"><b>64.4%</b><em>上涨占比</em></div>
 <div class="kpi"><b>强修复扩散</b><em>情绪阶段</em></div>
+<div class="kpi up"><b>85.2%</b><em>封板率</em></div>
+<div class="kpi down"><b>14.8%</b><em>分歧度</em></div>
+<div class="kpi up"><b>7.1%</b><em>20cm占比</em></div>
+<div class="kpi"><b>0%</b><em>晋级率</em></div>
 </section>
 <section class="summary-grid">
 <div class="summary-card"><span>主线</span><b>AI算力/硬件/通信链</b><em>板块量价：-113亿，高强/近涨停73只，高分歧。</em></div><div class="summary-card"><span>观察</span><b>机器人/工业母机/高端制造</b><em>板块量价：7.34亿，高强/近涨停86只，高分歧。</em></div><div class="summary-card"><span>观察</span><b>电力/电网/新能源</b><em>板块量价：-96.89亿，高强/近涨停48只，高分歧。</em></div><div class="summary-card"><span>风险</span><b>风险边界</b><em>今天涨停98只，但这反而要求次日只看前排和容量承接，不能把普涨后排当作确定延续。AI算力/硬件/通信链若容量票转弱，主线要降级；机器人/工业母机/高端制造如果只剩单票强而无新前排，应按活口处理；ST链只看情绪温度，不做主线外推；炸板和跌停没有消失，后排追涨风险仍高。</em></div>
@@ -158,7 +164,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <div class="board-section main">
 <h3>AI算力/硬件/通信链（主线）</h3>
 <ul>
-<li>板块量价：净流出113亿，高强/近涨停73只，高分歧。</li>
+<li>板块量价：净流出<span class="money-out">113亿</span>，高强/近涨停73只。</li>
 <li>方向成员池：国安股份<span class="pct-up">+10.16%</span>；润建股份<span class="pct-up">+10.00%</span>；传艺科技<span class="pct-up">+10.01%</span>；波导股份<span class="pct-up">+10.02%</span>；通鼎互联<span class="pct-up">+10.01%</span>；铭普光磁<span class="pct-up">+10.00%</span>；共达电声<span class="pct-up">+10.00%</span>；昀冢科技<span class="pct-up">+20.00%</span>；立昂微<span class="pct-up">+9.99%</span>；汇绿生态<span class="pct-up">+10.00%</span>；烽火通信<span class="pct-up">+10.00%</span>；长江通信<span class="pct-up">+9.99%</span>；光迅科技<span class="pct-up">+10.00%</span>；联动科技<span class="pct-up">+17.76%</span>；锴威特<span class="pct-up">+12.64%</span>等。</li>
 <li>裁定：AI算力/硬件/通信链同时出现多个父子标签同向强化，且有连板、趋势中军和20cm弹性共同确认，是今天最完整的主线。</li>
 </ul>
@@ -166,7 +172,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <div class="board-section sub">
 <h3>机器人/工业母机/高端制造（次主线）</h3>
 <ul>
-<li>板块量价：净流入7.34亿，高强/近涨停86只，高分歧。</li>
+<li>板块量价：净流入<span class="money-in">7.34亿</span>，高强/近涨停86只。</li>
 <li>方向成员池：雷赛智能<span class="pct-up">+10.00%</span>；泰坦股份<span class="pct-up">+10.00%</span>；宝鼎科技<span class="pct-up">+9.98%</span>；鲁信创投<span class="pct-up">+10.01%</span>；卓郎智能<span class="pct-up">+9.98%</span>；巨轮智能<span class="pct-up">+9.97%</span>；五洲新春<span class="pct-up">+10.01%</span>；大业股份<span class="pct-up">+10.04%</span>；贵绳股份<span class="pct-up">+10.03%</span>；日发精机<span class="pct-up">+9.93%</span>；天奇股份<span class="pct-up">+10.00%</span>；恒锋工具<span class="pct-up">+20.01%</span>；华之杰<span class="pct-up">+10.01%</span>；鼎熔岩<span class="pct-up">+20.01%</span>；恒星科技<span class="pct-up">+10.00%</span>等。</li>
 <li>裁定：有连板和涨停扩散，但宽度、资金或容量确认弱于科技硬件，先按次主线处理。</li>
 </ul>
@@ -174,7 +180,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <div class="board-section sub">
 <h3>电力/电网/新能源（次主线）</h3>
 <ul>
-<li>板块量价：净流出96.89亿，高强/近涨停48只，高分歧。</li>
+<li>板块量价：净流出<span class="money-out">96.89亿</span>，高强/近涨停48只。</li>
 <li>方向成员池：大唐发电<span class="pct-up">+9.92%</span>；兆新股份<span class="pct-up">+10.00%</span>；杭电股份<span class="pct-up">+10.00%</span>；新能泰山<span class="pct-up">+10.06%</span>；温州宏丰<span class="pct-up">+20.00%</span>；钧达股份<span class="pct-up">+10.01%</span>；起帆电缆<span class="pct-up">+7.31%</span>；四方股份<span class="pct-up">+5.94%</span>；甘肃能源<span class="pct-up">+5.75%</span>；安孚科技<span class="pct-up">+5.04%</span>；北京科锐<span class="pct-up">+4.70%</span>；康平科技<span class="pct-up">+4.05%</span>；华电辽能<span class="pct-up">+3.67%</span>；金杨精密<span class="pct-up">+3.48%</span>；崧盛股份<span class="pct-up">+3.39%</span>等。</li>
 <li>裁定：有连板和涨停扩散，但宽度、资金或容量确认弱于科技硬件，先按次主线处理。</li>
 </ul>
@@ -182,7 +188,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <div class="board-section alive">
 <h3>医药/医疗（活口）</h3>
 <ul>
-<li>板块量价：净流出80.80亿，高强/近涨停24只，高分歧。</li>
+<li>板块量价：净流出<span class="money-out">80.80亿</span>，高强/近涨停24只。</li>
 <li>方向成员池：众生药业<span class="pct-up">+10.00%</span>；达安基因<span class="pct-up">+9.93%</span>；贝瑞基因<span class="pct-up">+10.01%</span>；太龙药业<span class="pct-up">+10.06%</span>；拓新药业<span class="pct-up">+7.78%</span>；奥赛康<span class="pct-up">+5.91%</span>；拱东医疗<span class="pct-up">+5.49%</span>；万泰生物<span class="pct-up">+5.21%</span>；东方生物<span class="pct-up">+4.64%</span>；东星医疗<span class="pct-up">+4.20%</span>；诚意药业<span class="pct-up">+3.02%</span>；维康药业<span class="pct-up">+2.76%</span>；宝莱特<span class="pct-up">+2.75%</span>；华兰股份<span class="pct-up">+2.29%</span>；博拓生物<span class="pct-up">+2.09%</span>等。</li>
 <li>裁定：有强票和链条辨识度，但整体宽度不足，按活口而非主线处理。</li>
 </ul>
@@ -190,7 +196,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <div class="board-section alive">
 <h3>消费/传媒/AI应用（活口）</h3>
 <ul>
-<li>板块量价：净流出74.79亿，高强/近涨停14只，高分歧。</li>
+<li>板块量价：净流出<span class="money-out">74.79亿</span>，高强/近涨停14只。</li>
 <li>方向成员池：完美世界<span class="pct-up">+10.03%</span>；交大昂立<span class="pct-up">+9.98%</span>；西部牧业<span class="pct-up">+13.42%</span>；新迅达<span class="pct-up">+7.33%</span>；中青宝<span class="pct-up">+6.87%</span>；怡亚通<span class="pct-up">+5.08%</span>；宝通科技<span class="pct-up">+2.03%</span>；承德露露<span class="pct-up">+0.89%</span>；迅游科技<span class="pct-up">+0.50%</span>；三人行<span class="pct-down">-0.52%</span>；狮头股份<span class="pct-down">-0.92%</span>；粤传媒<span class="pct-down">-1.98%</span>；易点天下<span class="pct-down">-0.23%</span>；引力传媒<span class="pct-up">+3.66%</span>。</li>
 <li>裁定：有强票和链条辨识度，但整体宽度不足，按活口而非主线处理。</li>
 </ul>
@@ -198,7 +204,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <div class="board-section alive">
 <h3>商业航天/军工/低空（活口）</h3>
 <ul>
-<li>板块量价：净流入58.79亿，高强/近涨停12只，高分歧。</li>
+<li>板块量价：净流入<span class="money-in">58.79亿</span>，高强/近涨停12只。</li>
 <li>方向成员池：航天长峰<span class="pct-up">+10.01%</span>；电科蓝天<span class="pct-up">+19.99%</span>；航发科技<span class="pct-up">+10.00%</span>；航天发展<span class="pct-up">+10.01%</span>；航天环宇<span class="pct-up">+14.89%</span>；理工导航<span class="pct-up">+9.28%</span>；炼石航空<span class="pct-up">+6.97%</span>；中国卫星<span class="pct-up">+6.41%</span>；中光学<span class="pct-up">+6.23%</span>；威海广泰<span class="pct-up">+2.92%</span>；六九一二<span class="pct-up">+1.81%</span>；爱乐达<span class="pct-up">+0.81%</span>。</li>
 <li>裁定：有强票和链条辨识度，但整体宽度不足，按活口而非主线处理。</li>
 </ul>
@@ -206,70 +212,70 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <div class="board-section other">
 <h3>化工/材料（待归因）</h3>
 <ul>
-<li>板块量价：净流出116亿，高强/近涨停60只，高分歧。</li>
+<li>板块量价：净流出<span class="money-out">116亿</span>，高强/近涨停60只。</li>
 <li>方向成员池：恒申新材<span class="pct-up">+10.03%</span>；洪通燃气<span class="pct-up">+10.04%</span>；升达林业<span class="pct-up">+9.98%</span>；福莱蒽特<span class="pct-up">+10.01%</span>；光华股份<span class="pct-up">+9.99%</span>；同大股份<span class="pct-up">+8.93%</span>；万盛股份<span class="pct-up">+8.46%</span>；唯特偶<span class="pct-up">+7.38%</span>；海正生材<span class="pct-up">+7.15%</span>；兴福电子<span class="pct-up">+6.78%</span>；雪天盐业<span class="pct-up">+6.04%</span>；远大控股<span class="pct-up">+5.48%</span>；浙江众成<span class="pct-up">+4.95%</span>；唯科科技<span class="pct-up">+4.78%</span>；天通股份<span class="pct-up">+4.22%</span>等。</li>
 </ul>
 </div>
 <div class="board-section other">
 <h3>汽车/零部件（待归因）</h3>
 <ul>
-<li>板块量价：净流入23.08亿，高强/近涨停44只，高分歧。</li>
+<li>板块量价：净流入<span class="money-in">23.08亿</span>，高强/近涨停44只。</li>
 <li>方向成员池：秦安股份<span class="pct-up">+9.98%</span>；天铭科技<span class="pct-up">+29.97%</span>；祥鑫科技<span class="pct-up">+10.02%</span>；襄阳轴承<span class="pct-up">+10.03%</span>；凌云股份<span class="pct-up">+10.05%</span>；飞龙股份<span class="pct-up">+10.00%</span>；瑞鹄模具<span class="pct-up">+9.99%</span>；精锻科技<span class="pct-up">+19.97%</span>；友升股份<span class="pct-up">+8.12%</span>；长源东谷<span class="pct-up">+7.37%</span>；卡倍亿<span class="pct-up">+5.67%</span>；超捷股份<span class="pct-up">+5.21%</span>；瑞玛精密<span class="pct-up">+5.11%</span>；维科精密<span class="pct-up">+4.78%</span>；斯菱智驱<span class="pct-up">+4.02%</span>等。</li>
 </ul>
 </div>
 <div class="board-section other">
 <h3>房地产/建筑/建材（待归因）</h3>
 <ul>
-<li>板块量价：净流出30.25亿，高强/近涨停38只，高分歧。</li>
+<li>板块量价：净流出<span class="money-out">30.25亿</span>，高强/近涨停38只。</li>
 <li>方向成员池：华联控股<span class="pct-up">+9.96%</span>；京投发展<span class="pct-up">+10.03%</span>；宁波富达<span class="pct-up">+10.07%</span>；三湘印象<span class="pct-up">+9.96%</span>；上实发展<span class="pct-up">+10.04%</span>；科新发展<span class="pct-up">+10.00%</span>；帝欧水华<span class="pct-up">+10.04%</span>；蒙娜丽莎<span class="pct-up">+9.98%</span>；尤安设计<span class="pct-up">+10.14%</span>；雄塑科技<span class="pct-up">+9.16%</span>；镇海股份<span class="pct-up">+7.98%</span>；全筑股份<span class="pct-up">+6.62%</span>；中设咨询<span class="pct-up">+6.38%</span>；开尔新材<span class="pct-up">+5.31%</span>；中源家居<span class="pct-up">+4.85%</span>等。</li>
 </ul>
 </div>
 <div class="board-section other">
 <h3>独立/待归因（待归因）</h3>
 <ul>
-<li>板块量价：板块资金数据未覆盖，高强/近涨停24只，高分歧。</li>
+<li>板块量价：<span style="color:var(--muted);">资金数据未覆盖</span>，高强/近涨停24只。</li>
 <li>方向成员池：福达合金<span class="pct-up">+10.00%</span>；南威软件<span class="pct-up">+10.00%</span>；泰晶科技<span class="pct-up">+9.99%</span>；北投科技<span class="pct-up">+10.00%</span>；红板科技<span class="pct-up">+10.00%</span>；江苏国泰<span class="pct-up">+10.00%</span>；圣阳股份<span class="pct-up">+10.00%</span>；山东玻纤<span class="pct-up">+9.99%</span>；康欣新材<span class="pct-up">+10.09%</span>；金海高科<span class="pct-up">+10.00%</span>；澄星股份<span class="pct-up">+9.99%</span>；荣联科技<span class="pct-up">+10.06%</span>；罗曼股份<span class="pct-up">+10.00%</span>；龙高股份<span class="pct-up">+9.99%</span>；仁智股份<span class="pct-up">+10.02%</span>等。</li>
 </ul>
 </div>
 <div class="board-section other">
 <h3>环保/公用事业（待归因）</h3>
 <ul>
-<li>板块量价：净流出5900万，高强/近涨停11只，高分歧。</li>
+<li>板块量价：净流出<span class="money-out">5900万</span>，高强/近涨停11只。</li>
 <li>方向成员池：京源环保<span class="pct-up">+13.92%</span>；中兰环保<span class="pct-up">+6.30%</span>；中创环保<span class="pct-up">+3.90%</span>；江南水务<span class="pct-up">+3.12%</span>；荣晟环保<span class="pct-up">+2.99%</span>；华骐环保<span class="pct-up">+2.82%</span>；创元科技<span class="pct-up">+2.23%</span>；华宏科技<span class="pct-up">+1.63%</span>；先河环保<span class="pct-up">+1.14%</span>；严牌股份<span class="pct-up">+0.12%</span>；盈峰环境<span class="pct-down">-0.73%</span>。</li>
 </ul>
 </div>
 <div class="board-section other">
 <h3>纺织/服装（待归因）</h3>
 <ul>
-<li>板块量价：净流入8.19亿，高强/近涨停10只，高分歧。</li>
+<li>板块量价：净流入<span class="money-in">8.19亿</span>，高强/近涨停10只。</li>
 <li>方向成员池：梦洁股份<span class="pct-up">+9.96%</span>；迎丰股份<span class="pct-up">+10.00%</span>；富春染织<span class="pct-up">+10.00%</span>；聚杰微纤<span class="pct-up">+13.27%</span>；酷特智能<span class="pct-up">+12.12%</span>；天创时尚<span class="pct-up">+7.13%</span>；红蜻蜓<span class="pct-up">+3.83%</span>；华升股<span class="pct-up">+1.53%</span>；真爱美家<span class="pct-up">+1.42%</span>；红豆股份<span class="pct-up">+0.71%</span>。</li>
 </ul>
 </div>
 <div class="board-section other">
 <h3>有色/钢铁/资源（待归因）</h3>
 <ul>
-<li>板块量价：净流出3.59亿，高强/近涨停7只，高分歧。</li>
+<li>板块量价：净流出<span class="money-out">3.59亿</span>，高强/近涨停7只。</li>
 <li>方向成员池：有研粉材<span class="pct-up">+8.17%</span>；新莱福<span class="pct-up">+4.46%</span>；金洲管道<span class="pct-up">+2.70%</span>；隆达股份<span class="pct-up">+0.80%</span>；龙磁科技<span class="pct-up">+0.09%</span>；深圳新星<span class="pct-down">-0.51%</span>；华达新材<span class="pct-down">-9.85%</span>。</li>
 </ul>
 </div>
 <div class="board-section other">
 <h3>交通/物流（待归因）</h3>
 <ul>
-<li>板块量价：净流入15.98亿，高强/近涨停5只，高分歧。</li>
+<li>板块量价：净流入<span class="money-in">15.98亿</span>，高强/近涨停5只。</li>
 <li>方向成员池：宏川智慧<span class="pct-up">+10.01%</span>；北部湾港<span class="pct-up">+9.98%</span>；海通发展<span class="pct-up">+6.53%</span>；五洲交通<span class="pct-up">+5.66%</span>；音飞储存<span class="pct-up">+0.42%</span>。</li>
 </ul>
 </div>
 <div class="board-section other">
 <h3>金融（待归因）</h3>
 <ul>
-<li>板块量价：净流出62.02亿，高强/近涨停4只，高分歧。</li>
+<li>板块量价：净流出<span class="money-out">62.02亿</span>，高强/近涨停4只。</li>
 <li>方向成员池：建元信托<span class="pct-up">+1.99%</span>；香溢融通<span class="pct-up">+1.65%</span>；仁东控股<span class="pct-up">+0.36%</span>；长江证券<span class="pct-down">-1.44%</span>。</li>
 </ul>
 </div>
 <div class="board-section other">
 <h3>农业/养殖（待归因）</h3>
 <ul>
-<li>板块量价：板块资金数据未覆盖，高强/近涨停3只，高分歧。</li>
+<li>板块量价：<span style="color:var(--muted);">资金数据未覆盖</span>，高强/近涨停3只。</li>
 <li>方向成员池：粤海饲料<span class="pct-up">+6.79%</span>；国投中鲁<span class="pct-up">+2.91%</span>；祖名股份<span class="pct-up">+2.19%</span>。</li>
 </ul>
 </div>
@@ -284,11 +290,11 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <td data-label="次日风险判定">次日风险判定</td>
 </tr></thead>
 <tbody>
-<tr><td data-label="股票">福达合金</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 1.18%，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">一字连板风险</td></tr><tr><td data-label="股票">大业股份</td><td data-label="今日状态"><span class="pct-up">+10.04%</span>，回封涨停</td><td data-label="换手/昨换手">换手 16.87%，昨换手 N/A</td><td data-label="所属方向">机器人/工业母机/高端制造</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">波导股份</td><td data-label="今日状态"><span class="pct-up">+10.02%</span>，回封涨停</td><td data-label="换手/昨换手">换手 7.76%，昨换手 N/A</td><td data-label="所属方向">AI算力/硬件/通信链</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">杭电股份</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 13.51%，昨换手 N/A</td><td data-label="所属方向">电力/电网/新能源</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">大唐发电</td><td data-label="今日状态"><span class="pct-up">+9.92%</span>，回封涨停</td><td data-label="换手/昨换手">换手 6.46%，昨换手 N/A</td><td data-label="所属方向">电力/电网/新能源</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">新能泰山</td><td data-label="今日状态"><span class="pct-up">+10.06%</span>，回封涨停</td><td data-label="换手/昨换手">换手 23.40%，昨换手 N/A</td><td data-label="所属方向">电力/电网/新能源</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">高潮接力风险</td></tr><tr><td data-label="股票">宏川智慧</td><td data-label="今日状态"><span class="pct-up">+10.01%</span>，回封涨停</td><td data-label="换手/昨换手">换手 4.28%，昨换手 N/A</td><td data-label="所属方向">交通/物流</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">通鼎互联</td><td data-label="今日状态"><span class="pct-up">+10.01%</span>，回封涨停</td><td data-label="换手/昨换手">换手 9.20%，昨换手 N/A</td><td data-label="所属方向">AI算力/硬件/通信链</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">众生药业</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 4.70%，昨换手 N/A</td><td data-label="所属方向">医药/医疗</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">红板科技</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 2.38%，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">一字连板风险</td></tr><tr><td data-label="股票">南威软件</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 2.56%，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">一字连板风险</td></tr><tr><td data-label="股票">北投科技</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 4.35%，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">共达电声</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 11.73%，昨换手 N/A</td><td data-label="所属方向">AI算力/硬件/通信链</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">润建股份</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 7.21%，昨换手 N/A</td><td data-label="所属方向">AI算力/硬件/通信链</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">泰晶科技</td><td data-label="今日状态"><span class="pct-up">+9.99%</span>，回封涨停</td><td data-label="换手/昨换手">换手 5.09%，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">山东玻纤</td><td data-label="今日状态"><span class="pct-up">+9.99%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">宝鼎科技</td><td data-label="今日状态"><span class="pct-up">+9.98%</span>，回封涨停</td><td data-label="换手/昨换手">换手 2.82%，昨换手 N/A</td><td data-label="所属方向">机器人/工业母机/高端制造</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">一字连板风险</td></tr><tr><td data-label="股票">巨轮智能</td><td data-label="今日状态"><span class="pct-up">+9.97%</span>，回封涨停</td><td data-label="换手/昨换手">换手 9.88%，昨换手 N/A</td><td data-label="所属方向">机器人/工业母机/高端制造</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr>
+<tr><td data-label="股票"><strong>福达合金</strong> <small>4连板</small></td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>大业股份</strong> <small>3连板</small></td><td data-label="今日状态"><span class="pct-up">+10.04%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>波导股份</strong> <small>3连板</small></td><td data-label="今日状态"><span class="pct-up">+10.02%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>杭电股份</strong> <small>3连板</small></td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>大唐发电</strong> <small>3连板</small></td><td data-label="今日状态"><span class="pct-up">+9.92%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>新能泰山</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+10.06%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>宏川智慧</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+10.01%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>通鼎互联</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+10.01%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>众生药业</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>红板科技</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>南威软件</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>北投科技</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>共达电声</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>润建股份</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>泰晶科技</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+9.99%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>山东玻纤</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+9.99%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>宝鼎科技</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+9.98%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票"><strong>巨轮智能</strong> <small>2连板</small></td><td data-label="今日状态"><span class="pct-up">+9.97%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">-- 数据缺失</td><td data-label="次日风险判定">分歧接力</td></tr>
 </tbody>
 </table></div>
 <h2>5. 过程状态分层</h2>
-<p>今日早盘市场延续昨日修复惯性，AI算力/硬件链高开冲高，<span class="pct-up">长光华芯</span>、<span class="pct-up">烽火通信</span>等前排快速锁筹，但半导体方向却遭遇集中兑现，<span class="pct-down">寒武纪</span>、<span class="pct-down">海光信息</span>遭大额净卖，说明资金在主线内部进行高低切换。盘中机器人及高端制造受到情绪扩散带动，<span class="pct-up">恒锋工具</span>20cm涨停，板块内多股晋级，但强度锚分歧加大，后排分化迹象初现。午后盘面热度降温，电力/电网、医药等次主线与活口方向逐步走强，而AI硬件方向资金裁定为负，显示追高意愿不足。尾盘炸板数增加、部分涨停股换手异常放大，市场由强修复扩散转入淘汰验证阶段，次日需警惕情绪先锋的承接力度。</p>
+<p><p>早盘AI算力延续修复惯性，资金集中挖掘通信设备、消费电子等低位硬件，波导股份、通鼎互联等连板晋级，但半导体权重遭遇集中兑现，寒武纪、海光信息放量下杀拖累科创板。盘中机器人方向持续走强，绿的谐波高开高打，恒锋工具封死20cm，带动工业母机全面扩散，成为日内最强增量方向。午后军工、汽车零部件轮动拉升，电科蓝天、精锻科技封板，资金高低切换明显。尾盘高位炸板率略有上升，部分AI后排冲高回落，市场呈现普涨下的强结构化分化，修复扩散伴随淘汰，情绪从一致转向分歧。</p></p>
 <h2 id="sec-layers">6. 四分层</h2>
 <h3>AI算力/硬件/通信链</h3>
 <ul>
@@ -412,15 +418,15 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <li><strong>次核心</strong>：祖名股份（<span class="pct-up">+2.19%</span>，换手 2.18%）—— 量价裁定：缩量。</li>
 </ul>
 <h2>7. 角色层总收口</h2>
-<p>今日情绪高度由4板一字连板的<span class="pct-up">福达合金</span>维持，但其独立属性且无板块支撑，高度有效性存疑。方向强度被AI算力/硬件链的情绪锚<span class="pct-up">长光华芯</span>和机器人方向的强度锚<span class="pct-up">恒锋工具</span>联手拿走，二者均呈现缩量锁筹或放量封板特征，带动各自板块大面积涨停。扩散留存质量存明显差异：机器人方向资金裁定已转正，前排换手健康，次日存续力相对较强；AI硬件方向虽为市场最大主线，但资金净流出超百亿，更多依赖情绪惯性，后排淘汰风险加大。电力/新能源、医药等活口方向为伴随型扩散，并非主动攻击方向，强度存疑，需等待主线分歧时是否能承接资金。</p>
+<p><p>情绪高度由独立标福达合金4连板勉强维持，缺乏板块支撑，空间指导意义有限。方向强度被机器人/工业母机与军工/低空两大阵营分割，二者均获得增量资金净流入，且具备情绪锚与强度锚共振，留存质量较高。AI算力虽以73只个股位居主线，但板块整体裁定净流出113亿，封板个股多集中于低位补涨，核心权重走弱，属于流量型主线，内部淘汰压力大。电力、医药、消费等活口方向仅存局部防御价值，资金介入深度不足。整体看，修复扩散未形成合力，需警惕情绪高度受限引发的退潮风险。</p></p>
 <h2>8. 事实依据</h2>
-<p>指数分化显著，<span class="pct-down">科创50</span>大跌2.29%，<span class="pct-down">创业板指</span>跌0.96%，而上证指数勉强平盘，显示资金从高弹性科技股向低位板块迁移。全市场涨跌比接近2:1，涨停98只，跌停仅2只，涨停炸板率不足15%，表面看情绪热烈，但平均涨跌幅不足1%，中位数0.64%，表明赚钱效应集中在局部。资金流层面，<span class="pct-down">半导体</span>净流出141亿、<span class="pct-down">电池</span>净流出129亿，与AI硬件方向裁定-113亿形成印证；而<span class="pct-up">军工装备</span>流入51.71亿、<span class="pct-up">汽车零部件</span>流入34.10亿，支持商业航天、汽车等方向活跃。连板股中福达合金4板一字、大业股份3板换手16.87%，连板高度和梯队完整，但高位缩量一字存在断板风险。</p>
+<p><p>上证指数平盘报收，科创50领跌<span class="pct-dn">-2.29%</span>，市场上涨家数2967，下跌1526，涨停98只，跌停仅2只，表面繁荣。AI算力主线涨停超10只，但板块资金净流出113亿，寒武纪、海光信息净流出均超140亿；机器人板块净流入7.34亿，恒锋工具<span class="pct-up">+20.01%</span>，绿的谐波<span class="pct-up">+14.11%</span>；军工装备行业净流入超51亿，电科蓝天涨近20%。连板高度4板，炸板17只，炸板率14.8%，分歧初现。资金高低切换痕迹明显：半导体、电池等高位赛道遭抛售，军工、汽车零部件、贵金属吸纳避险及增量资金。</p></p>
 <h2>9. 原因拆解</h2>
-<p>AI算力/硬件链成为绝对主线，源于前期调整后筹码沉淀较好，且受产业催化预期推动，今日烽火通信、润建股份等低位品种补涨，形成扩散效应，但核心半导体龙头被持续大卖，说明主线内部已进入补涨阶段而非主升。机器人/工业母机方向与制造升级政策预期共振，<span class="pct-up">绿的谐波</span>等核心标的走出持续超预期走势，吸引短线资金形成次主线，其资金裁定为正，表明有增量支撑。电力/电网方向则是在指数调整时，部分资金向低估值、高分红防御板块切换，叠加夏季用电预期，形成脉冲型扩散，但资金仍呈净流出，追高需谨慎。医药方向因众生药业2板带动，叠加防守属性，成为短线活口，但板块内多以小市值个股补涨为主，持续性依赖情绪锚能否继续超预期。</p>
+<p><p>AI算力之所以仍被界定为主线，因其涨停家数、连板梯队和扩散广度仍居首位，市场记忆驱动资金围绕算力硬件做补涨挖掘。但半导体环节因前期涨幅过大、海外出口限制传闻等因素遭遇集中获利了结，导致板块内部分裂，算力链条呈“硬件强、芯片弱”格局。机器人和军工方向承接了从高位科技撤出的资金，二者共同特征是多数个股价位低、筹码结构良好且具备产业政策或事件催化，容易形成短期合力。电力、医药等活口方向因缺乏强增量催化，仅作为防御支线存在，无法争夺主线地位。整体而言，资金弃高就低是今日结构分化的根本原因。</p></p>
 <h2>10. 盘中判断修正 + 次日观察与证伪</h2>
-<p>盘中可能误判为全面新周期开启，因早盘涨停家数快速破百，多个方向共振，但收盘数据显示炸板数增至17只，半导体流出未缓解，且科创50大跌，说明市场仍处于修复扩散的末端而非主升。修正为：情绪为强修复扩散后半程，次日将进入淘汰赛，不宜追涨后排。需要证伪的点包括：AI硬件方向裁定能否转正，即资金是否回流核心中军；电力/新能源方向的连板股大唐发电、新能泰山是否能在分歧中继续晋级；机器人方向绿的谐波、恒锋工具是否出现高位放量滞涨或砸板。若这些信号转弱，则情绪可能快速退潮，亏钱效应放大。</p>
+<p><p>盘中易将AI算力的涨停潮误判为板块全面回暖，但收盘数据证伪了这一判断：板块整体大幅净流出，核心半导体权重破位，实际上演的是“边打边撤”的淘汰赛，修复局限于少数流动性承载票。机器人方向上午曾视为支线轮动，但午后持续强化并出现增量接力，应修正为具备争夺新主线潜力的强方向。次日需验证：①AI算力情绪锚长光华芯能否守住平台、烽火通信是否继续缩量加速，若转弱则确认主线退潮；②机器人板块能否补量并出现3板以上强度标，恒锋工具和五洲新春的溢价情况是关键；③寒武纪等半导体权重能否止跌企稳，决定科创50的负反馈是否收敛。</p></p>
 <h2>11. 次日市场观察摘要</h2>
-<p>次日重点观察三组验证信号。其一，AI算力方向情绪锚<span class="pct-up">长光华芯</span>及强度锚<span class="pct-up">烽火通信</span>能否继续缩量连板，若出现放量炸板或高开低走，主线退潮风险加剧。其二，机器人方向前排<span class="pct-up">恒锋工具</span>20cm后换手承接情况，以及<span class="pct-up">大业股份</span>等连板股是否能承受分歧，该方向若缩量加速需警惕，分歧转一致才是买点。其三，观察科创50能否在半导体流出缓和后企稳，以及尾盘炸板股次日核按钮数量，若核按钮增加则市场风偏将急剧下降，应收缩仓位至绝对核心或空仓等待。</p>
+<p><p>第一组信号：AI算力回流验证。观察长光华芯、烽火通信集合竞价及早盘承接，若能超预期高走并带动半导体修复，则主线仍有修复机会；若直接低开闷杀，则判定退潮开启，需规避板块内后排和中位股。第二组信号：机器人与军工的持续性。重点看恒锋工具能否强势连板，电科蓝天是否走出放量换手二板，若二者均断板且板块内无新首板助攻，则市场重回混沌，轮动节奏将加快。第三组信号：指数层面量能与权重配合，若中字头或金融无法对冲科创50下行，市场广度将收窄，需警惕情绪再度转冷。</p></p>
 <h2>12. 股票池更新</h2>
 <div class="table-wrap"><table>
 <thead><tr><td data-label="动作">动作</td><td data-label="摘要">摘要</td></tr></thead>
@@ -431,7 +437,125 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 </tbody></table></div>
 <h2>13. 市场风险与参与边界</h2>
 <p>今天涨停数量很大（98只），但这反而要求次日只看前排和容量承接，不能把普涨后排当作确定延续。AI算力/硬件/通信链若容量票转弱，主线要降级；机器人/工业母机/高端制造、电力/电网/新能源如果只剩单票强而无新前排，应按活口处理；ST链只看情绪温度，不做主线外推；炸板和跌停没有消失，后排追涨风险仍高。</p>
-<div class="footer">自动生成于 2026-05-08 18:49:14 · 耗时 4.5s · 仅供手机查看与分享</div>
+<div class="footer">自动生成于 2026-05-08 19:06:46 · 耗时 6.1s · 仅供手机查看与分享</div>
+
+<h2 id="sec-charts" style="margin-top:30px;">量化图表</h2>
+
+<div id="chart-sentiment" style="width:100%;height:280px;"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;">
+  <div id="chart-fundflow" style="width:100%;height:400px;"></div>
+  <div id="chart-emotion" style="width:100%;height:400px;"></div>
+</div>
+
+<script>
+(function() {
+  // ── 市场情绪环形图 ──
+  (function() {
+    var dom = document.getElementById('chart-sentiment');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    chart.setOption({
+      title: { text: '市场情绪概览', left: 'center', top: 8, textStyle: { fontSize: 15, color: '#1f2937' } },
+      tooltip: { trigger: 'item', formatter: '{b}: {c}只 ({d}%)' },
+      legend: { bottom: 8, data: ['涨停', '炸板', '跌停'] },
+      series: [{
+        type: 'pie',
+        radius: ['45%', '72%'],
+        center: ['50%', '52%'],
+        avoidLabelOverlap: false,
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, position: 'outside', formatter: '{b}\n{c}只' },
+        emphasis: { label: { fontSize: 16, fontWeight: 'bold' } },
+        data: [
+          { value: 98, name: '涨停', itemStyle: { color: '#e74c3c' } },
+          { value: 17, name: '炸板', itemStyle: { color: '#f39c12' } },
+          { value: 2, name: '跌停', itemStyle: { color: '#27ae60' } }
+        ]
+      }]
+    });
+    chart.on('click', function() {});
+    window.addEventListener('resize', function() { chart.resize(); });
+  })();
+
+  // ── 资金流瀑布图（水平条形） ──
+  (function() {
+    var dom = document.getElementById('chart-fundflow');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    var inflowData = [{"name": "军工装备", "value": 51.71}, {"name": "汽车零部件", "value": 34.1}, {"name": "消费电子", "value": 22.2}, {"name": "通信设备", "value": 13.24}, {"name": "贵金属", "value": 11.63}];
+    var outflowData = [{"name": "半导体", "value": -141.0}, {"name": "电池", "value": -129.0}, {"name": "能源金属", "value": -48.47}, {"name": "电力", "value": -46.99}, {"name": "电网设备", "value": -46.9}];
+
+    var categories = [];
+    var values = [];
+    var colors = [];
+
+    inflowData.forEach(function(d) {
+      categories.push(d.name);
+      values.push(d.value);
+      colors.push('#e74c3c');
+    });
+    outflowData.forEach(function(d) {
+      categories.push(d.name);
+      values.push(Math.abs(d.value));
+      colors.push('#27ae60');
+    });
+
+    chart.setOption({
+      title: { text: '板块资金流 TOP5', left: 'center', top: 8, textStyle: { fontSize: 15, color: '#1f2937' } },
+      tooltip: { trigger: 'axis', formatter: function(p) { return p[0].name + '<br/>' + (p[0].value >= 0 ? '净流入' : '净流出') + ': ' + Math.abs(p[0].value).toFixed(2) + '亿'; } },
+      grid: { left: '3%', right: '8%', bottom: '3%', top: 50, containLabel: true },
+      xAxis: { type: 'value', name: '亿元', axisLabel: { fontSize: 11 } },
+      yAxis: { type: 'category', data: categories.reverse(), axisLabel: { fontSize: 11, width: 72, overflow: 'truncate' }, inverse: true },
+      series: [{
+        type: 'bar',
+        data: values.reverse().map(function(v, i) {
+          return { value: v, itemStyle: { color: colors.reverse()[i], borderRadius: [0, 4, 4, 0] } };
+        }),
+        barMaxWidth: 24,
+        label: { show: true, position: 'right', fontSize: 11, formatter: function(p) { return (p.value).toFixed(1) + '亿'; } }
+      }]
+    });
+    window.addEventListener('resize', function() { chart.resize(); });
+  })();
+
+  // ── 情绪阶段趋势折线图 ──
+  (function() {
+    var dom = document.getElementById('chart-emotion');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    var edata = [{"date": "04/29", "stage": ""}, {"date": "04/30", "stage": ""}, {"date": "05/01", "stage": ""}, {"date": "05/02", "stage": ""}, {"date": "05/03", "stage": ""}, {"date": "05/04", "stage": ""}, {"date": "05/05", "stage": ""}, {"date": "05/06", "stage": ""}, {"date": "05/07", "stage": ""}, {"date": "05/08", "stage": "强修复扩散"}];
+    var stageMap = { '冰点': 1, '退潮': 1, '修复': 2, '弱修复': 3, '修复确认': 4, '强修复扩散': 5, '强修复': 5, '发酵扩散偏高潮': 6, '启动': 5, '扩散': 6, '高潮': 7, '分歧': 8, '震荡分歧': 3, '恐慌释放': 1 };
+
+    var dates = edata.map(function(d) { return d.date; });
+    var values = edata.map(function(d) {
+      for (var k in stageMap) { if (d.stage && d.stage.indexOf(k) >= 0) return stageMap[k]; }
+      return 3;
+    });
+    var stageLabels = ['', '冰点/退潮', '修复', '弱修复', '修复确认', '强修复扩散', '偏高潮', '高潮', '分歧'];
+
+    chart.setOption({
+      title: { text: '情绪阶段趋势（近10日）', left: 'center', top: 8, textStyle: { fontSize: 15, color: '#1f2937' } },
+      tooltip: { trigger: 'axis', formatter: function(p) { return p[0].axisValue + '<br/>' + stageLabels[p[0].value] || ''; } },
+      grid: { left: '3%', right: '8%', bottom: '3%', top: 50, containLabel: true },
+      xAxis: { type: 'category', data: dates, axisLabel: { rotate: 30, fontSize: 10 } },
+      yAxis: {
+        type: 'value', min: 0, max: 9, interval: 1,
+        axisLabel: { formatter: function(v) { return stageLabels[v] || ''; }, fontSize: 10 }
+      },
+      series: [{
+        type: 'line',
+        data: values,
+        smooth: true,
+        lineStyle: { color: '#b45309', width: 2 },
+        itemStyle: { color: '#b45309' },
+        areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(180,83,9,0.3)'},{offset:1,color:'rgba(180,83,9,0.02)'}]) },
+        markLine: { silent: true, data: [{ yAxis: 5, label: { formatter: '强修复线' }, lineStyle: { color: '#e74c3c', type: 'dashed' } }] }
+      }]
+    });
+    window.addEventListener('resize', function() { chart.resize(); });
+  })();
+})();
+</script>
 </main>
 </body>
 </html>
