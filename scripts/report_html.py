@@ -72,7 +72,26 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 .collapse-content { max-height:60px; overflow:hidden; transition:max-height .3s; }
 .collapse-content.open { max-height:none; }
 @media (max-width:760px) {
-  .dashboard { grid-template-columns:repeat(2,1fr); }
+  body { font-size:14px; overflow-x:hidden; }
+  .page { width:100%; padding:10px 8px 20px; }
+  h1 { font-size:22px; }
+  h2 { font-size:16px; }
+  h3 { font-size:14px; }
+  .dashboard { grid-template-columns:repeat(2,1fr); gap:6px; }
+  .dashboard .kpi { padding:8px 4px; }
+  .dashboard .kpi b { font-size:18px; }
+  .summary-grid { grid-template-columns:1fr 1fr; gap:6px; }
+  .summary-card { min-height:auto; padding:8px 9px; }
+  .summary-card b { font-size:13px; }
+  .summary-card em { font-size:11px; }
+  .cover { padding:16px 14px 14px; }
+  .cover p { font-size:13px; }
+  .table-wrap { margin:8px -8px 12px; border-radius:0; }
+  table { font-size:12px; }
+  td { padding:6px 7px; }
+  li { padding:7px 8px 7px 15px; font-size:13px; }
+  p { font-size:13px; }
+  .collapse-toggle { font-size:11px; }
 }
 @media (min-width:760px) {
   body { font-size:15px; }
