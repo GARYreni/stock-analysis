@@ -34,6 +34,10 @@ warnings.filterwarnings("ignore")
 # 确保当前目录在 sys.path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# 缓存目录（与 scraper.py 共用）
+CACHE_DIR = os.path.join(os.environ.get("TEMP", os.path.expanduser("~")), "a_stock_cache")
+os.makedirs(CACHE_DIR, exist_ok=True)
+
 # ── 模块懒加载 ─────────────────────────────────────────────────
 
 _SCRAPER = None
@@ -947,6 +951,32 @@ def _analyze_connection_board(zt_df, realtime_df, industry_map, themes):
     lianban_stocks = []
     lb_cols = [c for c in zt_df.columns if "连板" in str(c) or "连续" in str(c)]
 
+    # ── 尝试加载昨日数据用于昨换手 ──
+    yesterday_turnover_map = {}
+    try:
+        import json
+        from datetime import date, timedelta
+        yesterday_str = (date.today() - timedelta(days=1)).strftime("%Y%m%d")
+        cache_path = os.path.join(CACHE_DIR, f"review_{yesterday_str}.json")
+        if os.path.exists(cache_path):
+            with open(cache_path, "r", encoding="utf-8") as f:
+                ydata = json.load(f)
+            for lb in ydata.get("lianban", []):
+                code = lb.get("code", "")
+                tr_str = lb.get("turnover", "N/A")
+                try:
+                    yesterday_turnover_map[code] = float(tr_str.replace("%", ""))
+                except:
+                    pass
+    except Exception:
+        pass
+
+    # 构建主题资金流映射
+    theme_fund_map = {}
+    for t in themes:
+        bf = t.get("board_fund", "")
+        theme_fund_map[t["name"]] = bf
+
     for _, row in zt_df.iterrows():
         lb_count = 0
         for col in lb_cols:
@@ -958,13 +988,12 @@ def _analyze_connection_board(zt_df, realtime_df, industry_map, themes):
         if lb_count < 2:
             continue
 
-        code = _code_bare(row.get("代码", ""))
+        code = _code_bare(row.get("code", ""))
         name = str(row.get("名称", ""))
         chg = _sf(row.get("涨跌幅(%)", row.get("涨跌幅", 0)))
 
         # 从实时行情获取换手率
         turnover = None
-        prev_turnover = None
         if realtime_df is not None and not realtime_df.empty:
             code_col = _safe_col(realtime_df, "代码")
             if code_col:
@@ -975,6 +1004,18 @@ def _analyze_connection_board(zt_df, realtime_df, industry_map, themes):
                     tr_col = _safe_col(realtime_df, "换手率(%)")
                     if tr_col:
                         turnover = _sf(match.iloc[0].get(tr_col, 0))
+
+        # 昨换手 + 换手变化判定
+        prev_turnover = yesterday_turnover_map.get(code)
+        turnover_change = ""
+        if turnover is not None and prev_turnover is not None and prev_turnover > 0:
+            ratio = turnover / prev_turnover
+            if ratio < 0.8:
+                turnover_change = "↑加速缩量"
+            elif ratio > 1.5:
+                turnover_change = "↓分歧放量"
+            else:
+                turnover_change = "→持平"
 
         # 风险判定
         risk_type = "分歧接力"
@@ -995,12 +1036,21 @@ def _analyze_connection_board(zt_df, realtime_df, industry_map, themes):
             state = "非涨跌停"
 
         # 确定所属主题
-        theme = "独立/待归因"
+        theme_name = "独立/待归因"
         for t in themes:
             for s in t.get("stocks", []):
                 if s.get("code") == code:
-                    theme = t["name"]
+                    theme_name = t["name"]
                     break
+
+        # 板块资金流
+        board_fund = theme_fund_map.get(theme_name, "")
+        if not board_fund:
+            board_fund_str = "-- 数据缺失"
+        elif board_fund.startswith("-"):
+            board_fund_str = f'<span class="money-out">净流出{board_fund[1:]}</span>'
+        else:
+            board_fund_str = f'<span class="money-in">净流入{board_fund}</span>'
 
         # ST标记
         is_st = name.startswith(("ST", "*ST", "S*ST", "SST"))
@@ -1014,9 +1064,13 @@ def _analyze_connection_board(zt_df, realtime_df, industry_map, themes):
             "state": state,
             "pct": _fmt_pct(chg),
             "pct_raw": chg,
-            "turnover": f"{turnover:.2f}%" if turnover else "N/A",
-            "prev_turnover": "N/A",
-            "theme": theme,
+            "turnover": f"{turnover:.2f}%" if turnover is not None else "N/A",
+            "turnover_raw": turnover,
+            "prev_turnover": f"{prev_turnover:.2f}%" if prev_turnover is not None else "N/A",
+            "prev_turnover_raw": prev_turnover,
+            "turnover_change": turnover_change,
+            "theme": theme_name,
+            "board_fund_html": board_fund_str,
             "risk_type": risk_type,
             "is_st": is_st,
         })
@@ -1227,6 +1281,51 @@ def run_postclose_review(use_cache=True):
     print("[postclose] 判定情绪阶段...")
     stage = _determine_market_stage(env, flow_sentiment)
 
+    # ── 4.5 量化指标计算 ──
+    zt_count = env["zt_count"]
+    zbgc_count = env["zbgc_count"]
+    zt_reached = zt_count + zbgc_count
+    # 分歧度指数
+    divergence_index = round((zt_reached - zt_count) / zt_reached * 100, 1) if zt_reached > 0 else 0
+    # 封板率
+    seal_rate = round(zt_count / zt_reached * 100, 1) if zt_reached > 0 else 0
+    # 20cm占比（创业板+科创板涨停 / 总涨停）
+    twenty_cm_count = 0
+    if zt_df is not None and not zt_df.empty:
+        pct_col_z = _safe_col(zt_df, "涨跌幅(%)")
+        code_col_z = _safe_col(zt_df, "代码")
+        if pct_col_z and code_col_z:
+            for _, zrow in zt_df.iterrows():
+                code_str = str(zrow.get(code_col_z, ""))
+                chg_val = _sf(zrow.get(pct_col_z, 0))
+                is_20cm = code_str.startswith("3") or code_str.startswith("68")
+                if is_20cm and chg_val >= 19.8:
+                    twenty_cm_count += 1
+    twenty_cm_ratio = round(twenty_cm_count / zt_count * 100, 1) if zt_count > 0 else 0
+    # 连板晋级率（需要昨日连板总数）
+    promotion_rate = 0
+    try:
+        import json
+        from datetime import date, timedelta
+        yesterday_str = (date.today() - timedelta(days=1)).strftime("%Y%m%d")
+        cache_path = os.path.join(CACHE_DIR, f"review_{yesterday_str}.json")
+        if os.path.exists(cache_path):
+            with open(cache_path, "r", encoding="utf-8") as f:
+                ydata = json.load(f)
+            yesterday_lb_total = len(ydata.get("lianban", []))
+            if yesterday_lb_total > 0:
+                promotion_rate = round(len([lb for lb in ([] if not zt_df.empty else [])]) / yesterday_lb_total * 100, 1)
+    except:
+        pass
+
+    quant = {
+        "divergence_index": divergence_index,
+        "seal_rate": seal_rate,
+        "twenty_cm_ratio": twenty_cm_ratio,
+        "twenty_cm_count": twenty_cm_count,
+        "promotion_rate": promotion_rate,
+    }
+
     # 5. 方向归类
     print("[postclose] 归类市场方向...")
     themes = _classify_themes(realtime_df, board_df, industry_map, zt_df, ind_flow)
@@ -1234,6 +1333,22 @@ def run_postclose_review(use_cache=True):
     # 6. 连板分析
     print("[postclose] 分析连板高度...")
     lianban = _analyze_connection_board(zt_df, realtime_df, industry_map, themes)
+
+    # 连板晋级率（需要昨日连板总数 + 今日连板数）
+    try:
+        import json
+        from datetime import date, timedelta
+        yesterday_str = (date.today() - timedelta(days=1)).strftime("%Y%m%d")
+        cache_path = os.path.join(CACHE_DIR, f"review_{yesterday_str}.json")
+        if os.path.exists(cache_path):
+            with open(cache_path, "r", encoding="utf-8") as f:
+                ydata = json.load(f)
+            yesterday_lb_total = len(ydata.get("lianban", []))
+            if yesterday_lb_total > 0:
+                today_promoted = len([lb for lb in lianban if lb["lb_count"] >= 2])
+                quant["promotion_rate"] = round(today_promoted / yesterday_lb_total * 100, 1)
+    except:
+        pass
 
     # 7. 四分层
     print("[postclose] 执行四分层锚定...")
@@ -1271,7 +1386,7 @@ def run_postclose_review(use_cache=True):
     elapsed = time.time() - t_start
     print(f"\n  [postclose] 分析完成，总耗时 {elapsed:.1f}s")
 
-    return {
+    result = {
         "date": date.today().strftime("%Y-%m-%d"),
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "env": env,
@@ -1279,6 +1394,7 @@ def run_postclose_review(use_cache=True):
         "fund_evidence": fund_evidence,
         "flow_sentiment": flow_sentiment,
         "stage": stage,
+        "quant": quant,
         "themes": themes,
         "lianban": lianban,
         "rotation": rotation,
@@ -1286,6 +1402,38 @@ def run_postclose_review(use_cache=True):
         "board_df": board_df,
         "elapsed": round(elapsed, 1),
     }
+
+    # ── 持久化存储 ──
+    try:
+        import json
+        review_date = date.today().strftime("%Y%m%d")
+        cache_path = os.path.join(CACHE_DIR, f"review_{review_date}.json")
+        # 序列化前处理（移除HTML标签，只存纯数据）
+        save_data = {
+            "date": result["date"],
+            "env": {k: v for k, v in env.items() if k != "indices"},
+            "stage": stage,
+            "quant": quant,
+            "themes": [{
+                "name": t["name"], "level": t.get("level", ""),
+                "member_count": t.get("member_count", 0),
+                "board_pct": t.get("board_pct", ""),
+                "board_fund": t.get("board_fund", ""),
+                "anchors": [{"name": a["name"], "role": a.get("role", "")} for a in t.get("anchors", [])],
+            } for t in themes],
+            "lianban": [{
+                "code": lb["code"], "name": lb["name"],
+                "lb_count": lb["lb_count"], "turnover": lb.get("turnover", "N/A"),
+                "theme": lb.get("theme", ""), "risk_type": lb.get("risk_type", ""),
+            } for lb in lianban],
+        }
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(save_data, f, ensure_ascii=False, indent=2)
+        print(f"  [postclose] 复盘数据已持久化: {cache_path}")
+    except Exception as e:
+        print(f"  [postclose] 持久化存储失败: {e}")
+
+    return result
 
 
 # ── CLI 独立运行 ───────────────────────────────────────────────

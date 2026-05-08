@@ -104,6 +104,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
   li { padding:7px 8px 7px 15px; font-size:13px; }
   p { font-size:13px; }
   .collapse-toggle { font-size:11px; }
+  .chart-row { grid-template-columns:1fr; }
 }
 @media (min-width:760px) {
   body { font-size:15px; }
@@ -219,15 +220,17 @@ def _section_dashboard(data: dict) -> str:
     env = data.get("env", {})
     stage = data.get("stage", {})
     indices = data.get("indices", {})
-
-    # 取第一个指数
-    idx_pct = list(indices.values())[0].get('pct', '0') if indices else '0'
+    quant = data.get("quant", {})
 
     return f"""<section class="dashboard">
 <div class="kpi up"><b>{env.get('zt_count', 0)}</b><em>涨停</em></div>
 <div class="kpi down"><b>{env.get('dt_count', 0)}</b><em>跌停</em></div>
 <div class="kpi {'up' if env.get('breadth', 0) > 50 else 'down'}"><b>{env.get('breadth', 0):.1f}%</b><em>上涨占比</em></div>
 <div class="kpi"><b>{stage.get('stage', '')[:6]}</b><em>情绪阶段</em></div>
+<div class="kpi up"><b>{quant.get('seal_rate', 0)}%</b><em>封板率</em></div>
+<div class="kpi down"><b>{quant.get('divergence_index', 0)}%</b><em>分歧度</em></div>
+<div class="kpi up"><b>{quant.get('twenty_cm_ratio', 0)}%</b><em>20cm占比</em></div>
+<div class="kpi"><b>{quant.get('promotion_rate', 0)}%</b><em>晋级率</em></div>
 </section>"""
 
 # ── 摘要卡片 ────────────────────────────────────────────────────
@@ -455,15 +458,17 @@ def _section_themes(data: dict) -> str:
         member_count = theme.get("member_count", 0)
 
         # 板块量价描述
-        board_fund = theme.get("board_fund", "资金数据未覆盖")
+        board_fund = theme.get("board_fund", "")
         board_pct = theme.get("board_pct", "")
         if not board_fund:
-            fund_label = "板块资金数据未覆盖"
+            fund_label = '<span style="color:var(--muted);">资金数据未覆盖</span>'
         elif board_fund.startswith('-'):
-            fund_label = f"净流出{board_fund[1:]}"
+            fund_label = f'净流出<span class="money-out">{board_fund[1:]}</span>'
         else:
-            fund_label = f"净流入{board_fund}"
-        board_desc = f"{fund_label}，高强/近涨停{member_count}只，高分歧。"
+            fund_label = f'净流入<span class="money-in">{board_fund}</span>'
+        active_days = theme.get("active_days", 0)
+        active_note = f" 连续活跃{active_days}天" if active_days >= 2 else ""
+        board_desc = f"{fund_label}，高强/近涨停{member_count}只{active_note}。"
 
         cls_map = {"主线":"main", "次主线":"sub", "活口":"alive", "情绪":"other", "待定":"other"}
         cls = cls_map.get(level, "alive")
@@ -504,21 +509,36 @@ def _section_lianban(data: dict) -> str:
     if not lianban:
         return "<h3>4.5 连板高度单元</h3>\n<p>暂无连板数据。</p>"
 
+    # 连板晋级率
+    quant = data.get("quant", {})
+    pr = quant.get("promotion_rate", 0)
+    promo_badge = f' <span style="font-size:12px;color:var(--muted);font-weight:400;">晋级率 {pr}%</span>' if pr > 0 else ""
+
     rows = []
     for lb in lianban:
         pct_span = _pct_span(lb.get("pct", ""))
+        tc = lb.get("turnover_change", "")
+        tc_span = ""
+        if "加速" in tc:
+            tc_span = f' <span style="color:var(--red);font-size:11px;">{tc}</span>'
+        elif "分歧" in tc:
+            tc_span = f' <span style="color:var(--green);font-size:11px;">{tc}</span>'
+        elif tc:
+            tc_span = f' <span style="color:var(--muted);font-size:11px;">{tc}</span>'
+
+        board_fund_html = lb.get("board_fund_html", "按所属方向资金与分歧度跟踪")
         rows.append(
             f'<tr>'
-            f'<td data-label="股票">{lb["name"]}</td>'
+            f'<td data-label="股票"><strong>{lb["name"]}</strong> <small>{lb["lb_count"]}连板</small></td>'
             f'<td data-label="今日状态">{pct_span}，{lb.get("state", "")}</td>'
-            f'<td data-label="换手/昨换手">换手 {lb.get("turnover", "N/A")}，昨换手 {lb.get("prev_turnover", "N/A")}</td>'
+            f'<td data-label="换手/昨换手">换手 {lb.get("turnover", "N/A")}，昨换手 {lb.get("prev_turnover", "N/A")}{tc_span}</td>'
             f'<td data-label="所属方向">{lb.get("theme", "")}</td>'
-            f'<td data-label="板块资金流">按所属方向资金与分歧度跟踪</td>'
+            f'<td data-label="板块资金流">{board_fund_html}</td>'
             f'<td data-label="次日风险判定">{lb.get("risk_type", "")}</td>'
             f'</tr>'
         )
 
-    return f"""<h3>4.5 连板高度单元</h3>
+    return f"""<h3>4.5 连板高度单元{promo_badge}</h3>
 <div class="table-wrap"><table>
 <thead><tr>
 <td data-label="股票">股票</td>
@@ -708,17 +728,22 @@ def gen_postclose_html(data: dict, title: str = None) -> str:
 
     body = "\n".join(sections)
 
+    # ── ECharts 图表 ──
+    chart_sections = _gen_charts(data)
+
     html = f"""<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title}</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 {CSS}
 </head>
 <body>
 <main class="page">
 {body}
+{chart_sections}
 </main>
 </body>
 </html>"""
@@ -746,6 +771,215 @@ def save_postclose_report(data: dict, output_path: str = None) -> str:
         f.write(html)
     print(f"  📄 收盘复盘报告已保存至: {output_path}")
     return output_path
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  ECharts 可视化图表生成 (v2.1)
+# ═══════════════════════════════════════════════════════════════════
+
+def _gen_charts(data: dict) -> str:
+    """生成所有 ECharts 图表 (市场情绪环形图 + 资金流瀑布图 + 情绪趋势折线图)"""
+    env = data.get("env", {})
+    fe = data.get("fund_evidence", {})
+    stage = data.get("stage", {})
+    quant = data.get("quant", {})
+
+    zt = env.get('zt_count', 0)
+    zbgc = env.get('zbgc_count', 0)
+    dt = env.get('dt_count', 0)
+    seal = quant.get('seal_rate', 0)
+    divergence = quant.get('divergence_index', 0)
+    twenty_cm = quant.get('twenty_cm_count', 0)
+
+    # ── 情绪趋势数据（最近10日模拟，实际应从历史存储读取） ──
+    emotion_data = _get_emotion_trend_data(data)
+
+    # ── 资金流瀑布图数据 ──
+    inflows = fe.get("sector_inflow_top5", [])
+    outflows = fe.get("sector_outflow_top5", [])
+
+    inflow_json = json.dumps([
+        {"name": i.get("name", ""), "value": _parse_flow_value(i.get("net", "0"))}
+        for i in inflows
+    ], ensure_ascii=False)
+    outflow_json = json.dumps([
+        {"name": o.get("name", ""), "value": _parse_flow_value(o.get("net", "0"))}
+        for o in outflows
+    ], ensure_ascii=False)
+    emotion_json = json.dumps(emotion_data, ensure_ascii=False)
+
+    return f"""
+<h2 id="sec-charts" style="margin-top:30px;">量化图表</h2>
+
+<div id="chart-sentiment" style="width:100%;height:280px;"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;">
+  <div id="chart-fundflow" style="width:100%;height:400px;"></div>
+  <div id="chart-emotion" style="width:100%;height:400px;"></div>
+</div>
+
+<script>
+(function() {{
+  // ── 市场情绪环形图 ──
+  (function() {{
+    var dom = document.getElementById('chart-sentiment');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    chart.setOption({{
+      title: {{ text: '市场情绪概览', left: 'center', top: 8, textStyle: {{ fontSize: 15, color: '#1f2937' }} }},
+      tooltip: {{ trigger: 'item', formatter: '{{b}}: {{c}}只 ({{d}}%)' }},
+      legend: {{ bottom: 8, data: ['涨停', '炸板', '跌停'] }},
+      series: [{{
+        type: 'pie',
+        radius: ['45%', '72%'],
+        center: ['50%', '52%'],
+        avoidLabelOverlap: false,
+        itemStyle: {{ borderRadius: 4, borderColor: '#fff', borderWidth: 2 }},
+        label: {{ show: true, position: 'outside', formatter: '{{b}}\\n{{c}}只' }},
+        emphasis: {{ label: {{ fontSize: 16, fontWeight: 'bold' }} }},
+        data: [
+          {{ value: {zt}, name: '涨停', itemStyle: {{ color: '#e74c3c' }} }},
+          {{ value: {zbgc}, name: '炸板', itemStyle: {{ color: '#f39c12' }} }},
+          {{ value: {dt}, name: '跌停', itemStyle: {{ color: '#27ae60' }} }}
+        ]
+      }}]
+    }});
+    chart.on('click', function() {{}});
+    window.addEventListener('resize', function() {{ chart.resize(); }});
+  }})();
+
+  // ── 资金流瀑布图（水平条形） ──
+  (function() {{
+    var dom = document.getElementById('chart-fundflow');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    var inflowData = {inflow_json};
+    var outflowData = {outflow_json};
+
+    var categories = [];
+    var values = [];
+    var colors = [];
+
+    inflowData.forEach(function(d) {{
+      categories.push(d.name);
+      values.push(d.value);
+      colors.push('#e74c3c');
+    }});
+    outflowData.forEach(function(d) {{
+      categories.push(d.name);
+      values.push(Math.abs(d.value));
+      colors.push('#27ae60');
+    }});
+
+    chart.setOption({{
+      title: {{ text: '板块资金流 TOP5', left: 'center', top: 8, textStyle: {{ fontSize: 15, color: '#1f2937' }} }},
+      tooltip: {{ trigger: 'axis', formatter: function(p) {{ return p[0].name + '<br/>' + (p[0].value >= 0 ? '净流入' : '净流出') + ': ' + Math.abs(p[0].value).toFixed(2) + '亿'; }} }},
+      grid: {{ left: '3%', right: '8%', bottom: '3%', top: 50, containLabel: true }},
+      xAxis: {{ type: 'value', name: '亿元', axisLabel: {{ fontSize: 11 }} }},
+      yAxis: {{ type: 'category', data: categories.reverse(), axisLabel: {{ fontSize: 11, width: 72, overflow: 'truncate' }}, inverse: true }},
+      series: [{{
+        type: 'bar',
+        data: values.reverse().map(function(v, i) {{
+          return {{ value: v, itemStyle: {{ color: colors.reverse()[i], borderRadius: [0, 4, 4, 0] }} }};
+        }}),
+        barMaxWidth: 24,
+        label: {{ show: true, position: 'right', fontSize: 11, formatter: function(p) {{ return (p.value).toFixed(1) + '亿'; }} }}
+      }}]
+    }});
+    window.addEventListener('resize', function() {{ chart.resize(); }});
+  }})();
+
+  // ── 情绪阶段趋势折线图 ──
+  (function() {{
+    var dom = document.getElementById('chart-emotion');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    var edata = {emotion_json};
+    var stageMap = {{ '冰点': 1, '退潮': 1, '修复': 2, '弱修复': 3, '修复确认': 4, '强修复扩散': 5, '强修复': 5, '发酵扩散偏高潮': 6, '启动': 5, '扩散': 6, '高潮': 7, '分歧': 8, '震荡分歧': 3, '恐慌释放': 1 }};
+
+    var dates = edata.map(function(d) {{ return d.date; }});
+    var values = edata.map(function(d) {{
+      for (var k in stageMap) {{ if (d.stage && d.stage.indexOf(k) >= 0) return stageMap[k]; }}
+      return 3;
+    }});
+    var stageLabels = ['', '冰点/退潮', '修复', '弱修复', '修复确认', '强修复扩散', '偏高潮', '高潮', '分歧'];
+
+    chart.setOption({{
+      title: {{ text: '情绪阶段趋势（近10日）', left: 'center', top: 8, textStyle: {{ fontSize: 15, color: '#1f2937' }} }},
+      tooltip: {{ trigger: 'axis', formatter: function(p) {{ return p[0].axisValue + '<br/>' + stageLabels[p[0].value] || ''; }} }},
+      grid: {{ left: '3%', right: '8%', bottom: '3%', top: 50, containLabel: true }},
+      xAxis: {{ type: 'category', data: dates, axisLabel: {{ rotate: 30, fontSize: 10 }} }},
+      yAxis: {{
+        type: 'value', min: 0, max: 9, interval: 1,
+        axisLabel: {{ formatter: function(v) {{ return stageLabels[v] || ''; }}, fontSize: 10 }}
+      }},
+      series: [{{
+        type: 'line',
+        data: values,
+        smooth: true,
+        lineStyle: {{ color: '#b45309', width: 2 }},
+        itemStyle: {{ color: '#b45309' }},
+        areaStyle: {{ color: new echarts.graphic.LinearGradient(0,0,0,1,[{{offset:0,color:'rgba(180,83,9,0.3)'}},{{offset:1,color:'rgba(180,83,9,0.02)'}}]) }},
+        markLine: {{ silent: true, data: [{{ yAxis: 5, label: {{ formatter: '强修复线' }}, lineStyle: {{ color: '#e74c3c', type: 'dashed' }} }}] }}
+      }}]
+    }});
+    window.addEventListener('resize', function() {{ chart.resize(); }});
+  }})();
+}})();
+</script>"""
+
+
+def _parse_flow_value(net_str: str) -> float:
+    """解析资金流字符串为数值（亿）"""
+    if not net_str:
+        return 0.0
+    s = str(net_str).replace("+", "").replace(",", "")
+    try:
+        if "亿" in s:
+            return float(s.replace("亿", ""))
+        elif "万" in s:
+            return float(s.replace("万", "")) / 10000
+        else:
+            return float(s)
+    except:
+        return 0.0
+
+
+def _get_emotion_trend_data(data: dict) -> list:
+    """获取最近10个交易日的情绪阶段趋势数据"""
+    import os
+    from datetime import date, timedelta
+
+    today = date.today()
+    trend = []
+    for i in range(9, -1, -1):
+        d = today - timedelta(days=i)
+        date_str = d.strftime("%Y%m%d")
+        display_date = d.strftime("%m/%d")
+        stage_val = ""
+
+        # 尝试从历史存储读取
+        cache_path = os.path.join(
+            os.environ.get("TEMP", os.path.expanduser("~")),
+            "a_stock_cache", f"review_{date_str}.json"
+        )
+        try:
+            import json
+            if os.path.exists(cache_path):
+                with open(cache_path, "r", encoding="utf-8") as f:
+                    hist = json.load(f)
+                stage_val = hist.get("stage", {}).get("stage", "")
+        except:
+            pass
+
+        # 如果当天就是今天，用当前数据
+        if i == 0:
+            stage_val = data.get("stage", {}).get("stage", "")
+
+        trend.append({
+            "date": display_date,
+            "stage": stage_val,
+        })
+    return trend
 
 
 # ── 独立运行 ────────────────────────────────────────────────────
