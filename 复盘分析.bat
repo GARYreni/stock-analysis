@@ -1,169 +1,149 @@
 @echo off
-chcp 65001 >nul
-cd /d "D:\AI\股票分析\stock-analysis\scripts"
+setlocal enabledelayedexpansion
+
+:: --- use script's own location, no hardcoded paths ---
+set "ROOT=%~dp0"
+set "ROOT=%ROOT:~0,-1%"
+set "SCRIPTS=%ROOT%\scripts"
+set "DOCS=%ROOT%\docs"
+
+:: --- find python ---
+set "PY=python"
+where python >nul 2>&1
+if %errorlevel% neq 0 (
+    for %%p in (
+        "C:\Users\Gary\miniconda3\python.exe"
+        "%LOCALAPPDATA%\Programs\Python\Python312\python.exe"
+        "%LOCALAPPDATA%\Programs\Python\Python311\python.exe"
+        "%LOCALAPPDATA%\Programs\Python\Python310\python.exe"
+    ) do (
+        if exist %%p set "PY=%%p"
+    )
+)
+
+:: --- verify main.py ---
+if not exist "%SCRIPTS%\main.py" (
+    echo [ERROR] main.py not found at: %SCRIPTS%
+    pause
+    exit /b 1
+)
+
+cd /d "%SCRIPTS%"
 
 :menu
 cls
 echo ================================================================
-echo   YANJIUYUAN A股收盘复盘分析系统  v2.1
+echo   YANJIUYUAN Postclose Review System  v2.1
+echo   %DATE% %TIME:~0,5%
 echo ================================================================
 echo.
-echo   [1] 收盘复盘分析（生成HTML报告 + 飞书通知）
-echo   [2] 收盘复盘分析（仅生成HTML，不发送飞书）
-echo   [3] 收盘复盘分析（含DeepSeek AI分析）
-echo   [4] 全市场全景分析
-echo   [5] 板块深度分析
-echo   [6] 个股深度分析（含K线）
-echo   [7] 机会发现（技术选股+涨跌停）
-echo   [8] 荐股评分（多维度加权）
-echo   [9] 龙虎榜分析
-echo   [A] 资金流分析
-echo   [B] 科创板全景
-echo   [H] 当日热门股票
-echo   [D] 部署到GitHub Pages
-echo   [Q] 退出
+echo   [1] Postclose Review (HTML + Feishu notify)
+echo   [2] Postclose Review (HTML only, no AI)
+echo   [3] Postclose Review (with DeepSeek AI)
+echo   [4] Full Market Scan
+echo   [5] Sector Analysis
+echo   [6] Stock Analysis (K-line)
+echo   [7] Opportunity Discovery
+echo   [8] Stock Rating
+echo   [9] LHB (Dragon-Tiger) Analysis
+echo   [A] Fund Flow Analysis
+echo   [B] STAR Market (KeChuangBan)
+echo   [H] Hot Stocks Today
+echo   [D] Deploy docs/ to GitHub Pages
+echo   [Q] Quit
 echo.
-set /p choice="  请选择 [1-Q]: "
+set /p choice="  Select [1-Q]: "
 
-if "%choice%"=="1" goto postclose_full
-if "%choice%"=="2" goto postclose_only
-if "%choice%"=="3" goto postclose_ai
-if "%choice%"=="4" goto market
-if "%choice%"=="5" goto sector
-if "%choice%"=="6" goto stock
-if "%choice%"=="7" goto opportunity
-if "%choice%"=="8" goto recommend
-if "%choice%"=="9" goto lhb
-if "%choice%"=="A" goto fundflow
-if "%choice%"=="B" goto kcb
-if "%choice%"=="H" goto hot
-if "%choice%"=="D" goto deploy
-if "%choice%"=="Q" goto end
-if "%choice%"=="q" goto end
-echo 无效选择，请重试
-pause
-goto menu
+if "%choice%"=="1" ( call :run python main.py --postclose )
+if "%choice%"=="2" ( call :run python main.py --postclose --no-ai )
+if "%choice%"=="3" ( call :postclose_ai )
+if "%choice%"=="4" ( call :run python main.py )
+if "%choice%"=="5" ( call :sector )
+if "%choice%"=="6" ( call :stock )
+if "%choice%"=="7" ( call :run python main.py --opportunity )
+if "%choice%"=="8" ( call :run python main.py --recommend )
+if "%choice%"=="9" ( call :run python main.py --lhb )
+if /i "%choice%"=="A" ( call :run python main.py --fund-flow )
+if /i "%choice%"=="B" ( call :run python main.py --kcb )
+if /i "%choice%"=="H" ( call :run python main.py --hot )
+if /i "%choice%"=="D" ( call :deploy )
+if /i "%choice%"=="Q" goto :end
+echo Invalid choice.
+timeout /t 1 >nul
+goto :menu
 
-:postclose_full
-echo.
-echo [启动] 收盘复盘分析（含飞书通知）...
-python main.py --postclose --feishu-webhook "%FEISHU_WEBHOOK_URL%"
-echo.
-pause
-goto menu
+:: ===== subroutines =====
 
-:postclose_only
+:run
 echo.
-echo [启动] 收盘复盘分析（仅HTML）...
-python main.py --postclose --no-ai
+echo [RUN] %*
+echo.
+%PY% %*
+if %errorlevel% neq 0 (
+    echo.
+    echo [ERROR] exit code: %errorlevel%
+)
 echo.
 pause
-goto menu
+goto :menu
 
 :postclose_ai
 echo.
-echo [启动] 收盘复盘分析（含AI分析）...
-set /p dk="  DeepSeek API Key (留空跳过): "
+set /p dk="  DeepSeek API Key (press Enter to skip): "
 if "%dk%"=="" (
-    python main.py --postclose --no-ai
+    call :run python main.py --postclose --no-ai
 ) else (
-    python main.py --postclose --deepseek-key %dk%
+    call :run python main.py --postclose --deepseek-key "%dk%"
 )
-echo.
-pause
-goto menu
-
-:market
-echo.
-echo [启动] 全市场全景分析...
-python main.py
-echo.
-pause
-goto menu
+goto :eof
 
 :sector
 echo.
-set /p bn="  输入板块名称 (如 有色金属): "
-echo [启动] 板块分析: %bn%...
-python main.py --sector "%bn%"
-echo.
-pause
-goto menu
+set /p bn="  Sector name: "
+if "%bn%"=="" goto :menu
+call :run python main.py --sector "%bn%"
+goto :eof
 
 :stock
 echo.
-set /p sc="  输入股票代码 (如 601899): "
-echo [启动] 个股分析: %sc%...
-python main.py --stock "%sc%" --kline
-echo.
-pause
-goto menu
-
-:opportunity
-echo.
-echo [启动] 机会发现...
-python main.py --opportunity
-echo.
-pause
-goto menu
-
-:recommend
-echo.
-echo [启动] 荐股评分...
-python main.py --recommend
-echo.
-pause
-goto menu
-
-:lhb
-echo.
-echo [启动] 龙虎榜分析...
-python main.py --lhb
-echo.
-pause
-goto menu
-
-:fundflow
-echo.
-echo [启动] 资金流分析...
-python main.py --fund-flow
-echo.
-pause
-goto menu
-
-:kcb
-echo.
-echo [启动] 科创板全景...
-python main.py --kcb
-echo.
-pause
-goto menu
-
-:hot
-echo.
-echo [启动] 当日热门股票...
-python main.py --hot
-echo.
-pause
-goto menu
+set /p sc="  Stock code: "
+if "%sc%"=="" goto :menu
+call :run python main.py --stock "%sc%" --kline
+goto :eof
 
 :deploy
 echo.
-echo [部署] 推送 docs/ 到 GitHub Pages...
-cd /d "D:\AI\股票分析\stock-analysis"
+echo [DEPLOY] Pushing docs/ to GitHub Pages...
+cd /d "%ROOT%"
 git add docs/
-git commit -m "deploy: manual push from BAT"
-git -c http.proxy=http://127.0.0.1:7897 -c https.proxy=http://127.0.0.1:7897 push origin master
+git commit -m "deploy: %DATE%" 2>nul
+
+:: try proxy first
+git -c http.proxy=http://127.0.0.1:7897 -c https.proxy=http://127.0.0.1:7897 push origin master 2>nul
 if %errorlevel% equ 0 (
-    echo [部署] ✅ 推送成功 https://garyreni.github.io/stock-analysis/
-) else (
-    echo [部署] ❌ 推送失败，尝试 gh CLI...
-    gh repo sync
+    echo [DEPLOY] OK  https://garyreni.github.io/stock-analysis/
+    pause
+    goto :menu
 )
-echo.
+
+:: try gh CLI
+gh repo sync 2>nul
+if %errorlevel% equ 0 (
+    echo [DEPLOY] OK via gh CLI
+    pause
+    goto :menu
+)
+
+:: try direct
+git push origin master 2>nul
+if %errorlevel% equ 0 (
+    echo [DEPLOY] OK direct
+) else (
+    echo [DEPLOY] FAILED - check network
+)
 pause
-goto menu
+goto :menu
 
 :end
-echo 再见!
+echo Done.
 exit
