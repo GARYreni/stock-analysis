@@ -108,6 +108,16 @@ def _fmt_amt(v):
     except:
         return "N/A"
 
+def _fmt_flow(v):
+    """格式化资金流（akshare 返回值已是亿为单位）"""
+    try:
+        v = float(v)
+        if abs(v) >= 100: return f"{v:.0f}亿"
+        if abs(v) >= 1: return f"{v:.2f}亿"
+        return f"{v*10000:.0f}万"
+    except:
+        return "N/A"
+
 def _safe_col(df, *names):
     for n in names:
         if n in df.columns:
@@ -369,15 +379,6 @@ def _analyze_fund_evidence(ind_flow, realtime_df, zt_df):
     }
 
     # 行业净流入/流出 Top5（akshare 返回值已是亿为单位）
-    def _fmt_flow(v):
-        try:
-            v = float(v)
-            if abs(v) >= 100: return f"{v:.0f}亿"
-            if abs(v) >= 1: return f"{v:.2f}亿"
-            return f"{v*10000:.0f}万"
-        except:
-            return "N/A"
-
     if ind_flow is not None and not ind_flow.empty:
         name_col = _safe_col(ind_flow, "行业名称")
         net_col = _safe_col(ind_flow, "净流入(万)", "净额")
@@ -385,18 +386,16 @@ def _analyze_fund_evidence(ind_flow, realtime_df, zt_df):
         if net_col and name_col:
             top_in = ind_flow.nlargest(5, net_col)
             for _, row in top_in.iterrows():
-                val = _sf(row[net_col], 0)
                 evidence["sector_inflow_top5"].append({
                     "name": row[name_col],
-                    "net": _fmt_flow(val),
+                    "net": _fmt_flow(_sf(row[net_col], 0)),
                     "pct": _fmt_pct(row[pct_col]) if pct_col else "",
                 })
             top_out = ind_flow.nsmallest(5, net_col)
             for _, row in top_out.iterrows():
-                val = _sf(row[net_col], 0)
                 evidence["sector_outflow_top5"].append({
                     "name": row[name_col],
-                    "net": _fmt_flow(val),
+                    "net": _fmt_flow(_sf(row[net_col], 0)),
                     "pct": _fmt_pct(row[pct_col]) if pct_col else "",
                 })
 
@@ -759,33 +758,47 @@ def _classify_themes(realtime_df, board_df, industry_map, zt_df, ind_flow):
         except Exception as e:
             print(f"  [postclose] 补充强势股失败: {e}")
 
-    # 补充板块量价数据
-    if board_df is not None and not board_df.empty:
-        for theme in themes.values():
-            # 查找匹配的板块
-            pct_col = _safe_col(board_df, "涨跌幅(%)")
-            name_col_b = _safe_col(board_df, "板块名称")
-            if pct_col and name_col_b:
-                matched = board_df[board_df[name_col_b].astype(str).str.contains(
-                    theme["name"][:6], na=False
-                )]
-                if not matched.empty:
-                    row = matched.iloc[0]
-                    theme["board_pct"] = _fmt_pct(row[pct_col])
+    # 将 THEME_CLASSIFICATION 的关键词反转为主题→关键词列表
+    _theme_keywords = {}
+    for kw, (theme_name, _) in THEME_CLASSIFICATION.items():
+        if theme_name not in _theme_keywords:
+            _theme_keywords[theme_name] = []
+        _theme_keywords[theme_name].append(kw)
 
-    # 补资金流数据
+    # 补充板块量价数据（用主题关键词精确匹配行业名称）
+    if board_df is not None and not board_df.empty:
+        pct_col = _safe_col(board_df, "涨跌幅(%)")
+        name_col_b = _safe_col(board_df, "板块名称")
+        if pct_col and name_col_b:
+            bnames = board_df[name_col_b].astype(str)
+            for theme in themes.values():
+                keywords = _theme_keywords.get(theme["name"], [theme["name"]])
+                matched_idx = None
+                for kw in keywords:
+                    m = bnames[bnames.str.contains(kw, na=False)]
+                    if not m.empty:
+                        matched_idx = m.index[0]
+                        break
+                if matched_idx is not None:
+                    theme["board_pct"] = _fmt_pct(board_df.loc[matched_idx, pct_col])
+
+    # 补资金流数据（用主题关键词匹配行业名称，汇总匹配到的资金流）
     if ind_flow is not None and not ind_flow.empty:
         name_col_f = _safe_col(ind_flow, "行业名称")
         net_col = _safe_col(ind_flow, "净流入(万)")
         if name_col_f and net_col:
+            fnames = ind_flow[name_col_f].astype(str)
             for theme in themes.values():
-                matched = ind_flow[ind_flow[name_col_f].astype(str).str.contains(
-                    theme["name"][:6], na=False
-                )]
-                if not matched.empty:
-                    row = matched.iloc[0]
-                    net_val = _sf(row[net_col], 0)
-                    theme["board_fund"] = _fmt_amt(net_val * 10000 if "万" in str(net_col) else net_val)
+                keywords = _theme_keywords.get(theme["name"], [theme["name"]])
+                total_net = 0.0
+                for kw in keywords:
+                    matched = ind_flow[fnames.str.contains(kw, na=False)]
+                    if not matched.empty:
+                        total_net += _sf(matched[net_col].sum(), 0)
+                if total_net != 0:
+                    theme["board_fund"] = _fmt_flow(total_net)
+                else:
+                    theme["board_fund"] = ""
 
     # 排序：主线 > 次主线 > 活口，同级别按成员数
     level_order = {"主线": 0, "次主线": 1, "活口": 2, "情绪": 3, "待定": 4}
