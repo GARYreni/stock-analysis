@@ -357,7 +357,16 @@ def _analyze_fund_evidence(ind_flow, realtime_df, zt_df):
         "stock_outflow_top5": [],
     }
 
-    # 行业净流入/流出 Top5（单位：万元 → 格式化为亿/万）
+    # 行业净流入/流出 Top5（akshare 返回值已是亿为单位）
+    def _fmt_flow(v):
+        try:
+            v = float(v)
+            if abs(v) >= 100: return f"{v:.0f}亿"
+            if abs(v) >= 1: return f"{v:.2f}亿"
+            return f"{v*10000:.0f}万"
+        except:
+            return "N/A"
+
     if ind_flow is not None and not ind_flow.empty:
         name_col = _safe_col(ind_flow, "行业名称")
         net_col = _safe_col(ind_flow, "净流入(万)", "净额")
@@ -368,7 +377,7 @@ def _analyze_fund_evidence(ind_flow, realtime_df, zt_df):
                 val = _sf(row[net_col], 0)
                 evidence["sector_inflow_top5"].append({
                     "name": row[name_col],
-                    "net": _fmt_amt(val * 10000),  # 万元 → 元 → 格式化
+                    "net": _fmt_flow(val),
                     "pct": _fmt_pct(row[pct_col]) if pct_col else "",
                 })
             top_out = ind_flow.nsmallest(5, net_col)
@@ -376,7 +385,7 @@ def _analyze_fund_evidence(ind_flow, realtime_df, zt_df):
                 val = _sf(row[net_col], 0)
                 evidence["sector_outflow_top5"].append({
                     "name": row[name_col],
-                    "net": _fmt_amt(val * 10000),
+                    "net": _fmt_flow(val),
                     "pct": _fmt_pct(row[pct_col]) if pct_col else "",
                 })
 

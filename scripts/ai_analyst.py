@@ -177,7 +177,7 @@ def _build_prompt(data: dict) -> str:
 
 
 def analyze_with_deepseek(data: dict, api_key: str = None,
-                          model: str = "deepseek-v4-flash",
+                          model: str = "deepseek-v4-pro",
                           base_url: str = "https://api.deepseek.com") -> dict:
     """
     调用 DeepSeek API 进行 AI 分析，返回各文字章节的 dict。
@@ -240,7 +240,7 @@ def analyze_with_deepseek(data: dict, api_key: str = None,
 
 
 def enrich_review_data(data: dict, api_key: str = None,
-                       model: str = "deepseek-v4-flash") -> dict:
+                       model: str = "deepseek-v4-pro") -> dict:
     """
     用 DeepSeek 分析结果丰富收盘复盘数据，返回增强后的 data dict。
     直接可传给 report_html.gen_postclose_html()。

@@ -201,7 +201,8 @@ def _section_summary_cards(data: dict) -> str:
     # 主线卡片
     if main_theme:
         t = main_theme[0]
-        detail = f"板块量价：{t.get('board_fund', '资金数据未覆盖')}，高强/近涨停{t.get('member_count', 0)}只，高分歧。"
+        fund = t.get('board_fund', '') or '资金数据未覆盖'
+        detail = f"板块量价：{fund}，高强/近涨停{t.get('member_count', 0)}只，高分歧。"
         cards.append(f'<div class="summary-card"><span>主线</span><b>{t["name"]}</b><em>{detail}</em></div>')
     else:
         cards.append(f'<div class="summary-card"><span>主线</span><b>待确认</b><em>今日暂无明确主线方向</em></div>')
@@ -209,7 +210,8 @@ def _section_summary_cards(data: dict) -> str:
     # 观察卡片
     if len(sub_theme) >= 1:
         t = sub_theme[0]
-        detail = f"板块量价：{t.get('board_fund', '资金数据未覆盖')}，高强/近涨停{t.get('member_count', 0)}只，高分歧。"
+        fund = t.get('board_fund', '') or '资金数据未覆盖'
+        detail = f"板块量价：{fund}，高强/近涨停{t.get('member_count', 0)}只，高分歧。"
         cards.append(f'<div class="summary-card"><span>观察</span><b>{t["name"]}</b><em>{detail}</em></div>')
     if len(sub_theme) >= 2:
         t = sub_theme[1]
@@ -404,7 +406,7 @@ def _section_themes(data: dict) -> str:
         # 板块量价描述
         board_fund = theme.get("board_fund", "资金数据未覆盖")
         board_pct = theme.get("board_pct", "")
-        board_desc = f"板块量价：{'板块资金数据未覆盖' if not board_fund else f'净流入{board_fund}'}，高强/近涨停{member_count}只，高分歧。"
+        board_desc = f"{'板块资金数据未覆盖' if not board_fund else f'净流入{board_fund}'}，高强/近涨停{member_count}只，高分歧。"
 
         lines.append(f"<h3>{name}{header_suffix}</h3>")
         lines.append(f"<ul>")
