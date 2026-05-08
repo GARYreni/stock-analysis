@@ -62,6 +62,18 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 .pct-up, .money-in { color:var(--red); font-weight:800; }
 .pct-down, .money-out { color:var(--green); font-weight:800; }
 .footer { margin-top:22px; padding-top:12px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; text-align:center; }
+.topnav { position:sticky; top:0; z-index:100; background:var(--paper); border-bottom:1px solid var(--line); padding:6px 4px; margin:-12px -10px 10px; display:flex; flex-wrap:wrap; gap:4px; overflow-x:auto; }
+.topnav a { flex-shrink:0; padding:4px 10px; border-radius:14px; background:#f3eadc; color:var(--ink); text-decoration:none; font-size:12px; white-space:nowrap; }
+.topnav a:hover { background:var(--accent); color:#fff; }
+@media (min-width:760px) {
+  .topnav { margin:-30px -38px 16px; padding:8px 34px; }
+  .topnav a { font-size:13px; padding:5px 14px; }
+}
+.board-section { border-left:3px solid var(--line); padding-left:10px; margin-bottom:14px; }
+.board-section.main { border-left-color:var(--red); background:linear-gradient(90deg,#fef2f2 0%,transparent 100%);padding:8px 10px 8px 12px;border-radius:0 8px 8px 0; }
+.board-section.sub { border-left-color:var(--accent); background:linear-gradient(90deg,#fff7ed 0%,transparent 100%);padding:8px 10px 8px 12px;border-radius:0 8px 8px 0; }
+.board-section.alive { border-left-color:var(--blue); }
+.board-section.other { border-left-color:var(--muted); }
 .dashboard { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0 8px; }
 .dashboard .kpi { text-align:center; padding:10px 6px; border-radius:10px; background:#fff; border:1px solid var(--line); }
 .dashboard .kpi b { display:block; font-size:22px; color:#111827; }
@@ -187,6 +199,20 @@ def _section_cover(data: dict) -> str:
 </section>"""
 
 
+# ── 顶部导航 ────────────────────────────────────────────────────
+
+def _section_nav(data: dict) -> str:
+    links = [
+        ("#sec-env", "盘型环境"),
+        ("#sec-themes", "板块分析"),
+        ("#sec-stages", "过程分层"),
+        ("#sec-layers", "四分层"),
+        ("#sec-lianban", "连板高度"),
+        ("#sec-ai", "AI分析"),
+    ]
+    items = [f'<a href="{href}">{label}</a>' for href, label in links]
+    return f'<nav class="topnav">{"".join(items)}</nav>'
+
 # ── 顶部仪表盘 ──────────────────────────────────────────────────
 
 def _section_dashboard(data: dict) -> str:
@@ -275,18 +301,23 @@ def _section_environment(data: dict) -> str:
     env = data.get("env", {})
     indices = data.get("indices", {})
 
+    def _fmt_idx(pct_str):
+        try:
+            v = float(pct_str.replace('%','').replace('+',''))
+        except:
+            return f" {pct_str}"
+        if abs(v) < 0.005:
+            return f"基本持平<span class=\"pct-up\">+0.00%</span>"
+        if v > 0:
+            return f"上涨<span class=\"pct-up\">+{v:.2f}%</span>"
+        return f"下跌<span class=\"pct-down\">{v:.2f}%</span>"
+
     idx_parts = []
     for sym, info in indices.items():
-        pct_str = str(info.get('pct', ''))
-        if pct_str.startswith('+'):
-            idx_parts.append(f"{info['name']}上涨<span class=\"pct-up\">{pct_str}</span>")
-        elif pct_str.startswith('-'):
-            idx_parts.append(f"{info['name']}下跌<span class=\"pct-down\">{pct_str}</span>")
-        else:
-            idx_parts.append(f"{info['name']} {pct_str}")
+        idx_parts.append(f"{info['name']}{_fmt_idx(str(info.get('pct', '0')))}")
 
     lines = [
-        "<h2>2. 盘型 / 环境</h2>",
+        '<h2 id="sec-env">2. 盘型 / 环境</h2>',
         f"<p>{'，'.join(idx_parts) if idx_parts else '指数数据暂不可用'}；"
         f"市场方向性广度约{env.get('breadth', 0):.2f}%，"
         f"上涨{env.get('up', 0)}家、下跌{env.get('down', 0)}家，"
@@ -306,7 +337,7 @@ def _section_environment(data: dict) -> str:
 
 def _section_fund_evidence(data: dict) -> str:
     fe = data.get("fund_evidence", {})
-    lines = ["<h3>2.5 资金流证据</h3>", "<ul>"]
+    lines = ['<h3 style="border-bottom:2px solid var(--accent);color:var(--accent2);">■ 资金流证据</h3>', "<ul>"]
 
     # 行业净流入
     inflows = fe.get("sector_inflow_top5", [])
@@ -350,7 +381,7 @@ def _section_sentiment_stage(data: dict) -> str:
 
     stage_label = stage.get('stage', '待判定')
     lines = [
-        "<h3>2.6 情绪运行阶段</h3>",
+        '<h3 style="border-bottom:2px solid var(--accent);color:var(--accent2);">■ 情绪运行阶段</h3>',
         f'<p>阶段判定为“{stage_label}”。'
         f"封住涨停{env.get('zt_count', 0)}只、触及涨停和炸板合计{env.get('zt_total_reached', 0)}只，"
         f"连板高度由ST链和非ST高标共同维持。但炸板{env.get('zbgc_count', 0)}只、跌停{env.get('dt_count', 0)}只"
@@ -404,9 +435,9 @@ def _section_rotation(data: dict) -> str:
 def _section_themes(data: dict) -> str:
     themes = data.get("themes", [])
     if not themes:
-        return "<h2>4. 主线 / 次主线 / 活口 / 失败轮动 / 资金撤退方向</h2>\n<p>方向归类数据暂不可用。</p>"
+        return '<h2 id="sec-themes">4. 主线 / 次主线 / 活口 / 失败轮动 / 资金撤退方向</h2>\n<p>方向归类数据暂不可用。</p>'
 
-    lines = ["<h2>4. 主线 / 次主线 / 活口 / 失败轮动 / 资金撤退方向</h2>"]
+    lines = ['<h2 id="sec-themes">4. 主线 / 次主线 / 活口 / 失败轮动 / 资金撤退方向</h2>']
 
     level_headers = {
         "主线": "（主线）",
@@ -427,6 +458,9 @@ def _section_themes(data: dict) -> str:
         board_pct = theme.get("board_pct", "")
         board_desc = f"{'板块资金数据未覆盖' if not board_fund else f'净流入{board_fund}'}，高强/近涨停{member_count}只，高分歧。"
 
+        cls_map = {"主线":"main", "次主线":"sub", "活口":"alive", "情绪":"other", "待定":"other"}
+        cls = cls_map.get(level, "alive")
+        lines.append(f'<div class="board-section {cls}">')
         lines.append(f"<h3>{name}{header_suffix}</h3>")
         lines.append(f"<ul>")
         lines.append(f"<li>板块量价：{board_desc}</li>")
@@ -451,6 +485,7 @@ def _section_themes(data: dict) -> str:
             lines.append(f"<li>裁定：可观察情绪高度，但不与主线基本面链条混排，更多是情绪温度计。</li>")
 
         lines.append("</ul>")
+        lines.append("</div>")
 
     return "\n".join(lines)
 
@@ -497,9 +532,9 @@ def _section_lianban(data: dict) -> str:
 def _section_four_layers(data: dict) -> str:
     themes = data.get("themes", [])
     if not themes:
-        return "<h2>6. 四分层</h2>\n<p>暂无四分层数据。</p>"
+        return '<h2 id="sec-layers">6. 四分层</h2>\n<p>暂无四分层数据。</p>'
 
-    lines = ["<h2>6. 四分层</h2>"]
+    lines = ['<h2 id="sec-layers">6. 四分层</h2>']
 
     for theme in themes:
         if theme.get("member_count", 0) < 2:
@@ -548,10 +583,11 @@ def _section_four_layers(data: dict) -> str:
             if len(uncl_names) > 10:
                 visible = "、".join(uncl_names[:10])
                 hidden = "、".join(uncl_names[10:])
+                cid = f"uncl{len(lines)}"  # safe numeric ID
                 lines.append(
                     f'<li>未进入四分层：{visible}'
-                    f'<span class="collapse-content" id="uncl_{theme.get("name", "")[:8]}">{hidden}</span>'
-                    f'<span class="collapse-toggle" onclick="var e=document.getElementById(\'uncl_{theme.get("name", "")[:8]}\');e.classList.toggle(\'open\');this.textContent=e.classList.contains(\'open\')?\'收起\':\'展开全部({len(uncl_names)-10}只)\'">'
+                    f'<span class="collapse-content" id="{cid}">{hidden}</span>'
+                    f'<span class="collapse-toggle" onclick="var e=document.getElementById(\'{cid}\');e.classList.toggle(\'open\');this.textContent=e.classList.contains(\'open\')?\'收起\':\'展开全部({len(uncl_names)-10}只)\'">'
                     f'展开全部({len(uncl_names)-10}只)</span>'
                     f'，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>'
                 )
@@ -638,6 +674,7 @@ def gen_postclose_html(data: dict, title: str = None) -> str:
 
     sections = [
         _section_cover(data),
+        _section_nav(data),
         _section_dashboard(data),
         _section_summary_cards(data),
         _section_one_line(data),

@@ -124,6 +124,17 @@ def _code_bare(code):
         return s[2:]
     return s.zfill(6)
 
+def _clean_name(name):
+    """清洗股票名称：去多余空格、去XD/XR/DR前缀、修复常见畸变"""
+    import re
+    n = str(name).strip()
+    # 去掉XD/XR/DR等除权前缀（后面紧跟中文名）
+    n = re.sub(r'^[Xx][DdRr]\s*', '', n)
+    # 去掉中文之间的多余空格（如"怡 亚 通"→"怡亚通"）
+    n = re.sub(r'(?<=[一-鿿])\s+(?=[一-鿿])', '', n)
+    # 去掉末尾空格
+    return n.strip()
+
 
 # ═══════════════════════════════════════════════════════════════════
 #  1. 数据汇聚
@@ -647,7 +658,7 @@ def _classify_themes(realtime_df, board_df, industry_map, zt_df, ind_flow):
 
         for _, row in zt_df.iterrows():
             code = _code_bare(row.get(code_col_z, ""))
-            name = str(row.get(name_col, ""))
+            name = _clean_name(str(row.get(name_col, "")))
             chg = _sf(row.get(chg_col, 0)) if chg_col else 0
 
             # 匹配行业：优先用 zt_df 自带的所属行业（最准确）
@@ -706,7 +717,7 @@ def _classify_themes(realtime_df, board_df, industry_map, zt_df, ind_flow):
                     continue
                 for _, row in df_src.iterrows():
                     code = _code_bare(row.get(code_col, ""))
-                    name = str(row.get(name_col, ""))
+                    name = _clean_name(str(row.get(name_col, "")))
                     chg = _sf(row.get(chg_col, 0)) if chg_col else 0
                     # 检查是否已在主题池中
                     already_in = False
