@@ -44,6 +44,18 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 .pct-up, .money-in { color:var(--red); font-weight:800; }
 .pct-down, .money-out { color:var(--green); font-weight:800; }
 .footer { margin-top:22px; padding-top:12px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; text-align:center; }
+.topnav { position:sticky; top:0; z-index:100; background:var(--paper); border-bottom:1px solid var(--line); padding:6px 4px; margin:-12px -10px 10px; display:flex; flex-wrap:wrap; gap:4px; overflow-x:auto; }
+.topnav a { flex-shrink:0; padding:4px 10px; border-radius:14px; background:#f3eadc; color:var(--ink); text-decoration:none; font-size:12px; white-space:nowrap; }
+.topnav a:hover { background:var(--accent); color:#fff; }
+@media (min-width:760px) {
+  .topnav { margin:-30px -38px 16px; padding:8px 34px; }
+  .topnav a { font-size:13px; padding:5px 14px; }
+}
+.board-section { border-left:3px solid var(--line); padding-left:10px; margin-bottom:14px; }
+.board-section.main { border-left-color:var(--red); background:linear-gradient(90deg,#fef2f2 0%,transparent 100%);padding:8px 10px 8px 12px;border-radius:0 8px 8px 0; }
+.board-section.sub { border-left-color:var(--accent); background:linear-gradient(90deg,#fff7ed 0%,transparent 100%);padding:8px 10px 8px 12px;border-radius:0 8px 8px 0; }
+.board-section.alive { border-left-color:var(--blue); }
+.board-section.other { border-left-color:var(--muted); }
 .dashboard { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0 8px; }
 .dashboard .kpi { text-align:center; padding:10px 6px; border-radius:10px; background:#fff; border:1px solid var(--line); }
 .dashboard .kpi b { display:block; font-size:22px; color:#111827; }
@@ -105,6 +117,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
   <h1>2026-05-08 正式收盘复盘</h1>
   <p>主交易线从AI算力/硬件/通信链打开；机器人/工业母机/高端制造、电力/电网/新能源跟随扩散；风险不在指数，而在涨停数量很大、炸板也不低，后排普涨和旧强分化不能被误判成同等主线。</p>
 </section>
+<nav class="topnav"><a href="#sec-env">盘型环境</a><a href="#sec-themes">板块分析</a><a href="#sec-stages">过程分层</a><a href="#sec-layers">四分层</a><a href="#sec-lianban">连板高度</a><a href="#sec-ai">AI分析</a></nav>
 <section class="dashboard">
 <div class="kpi up"><b>98</b><em>涨停</em></div>
 <div class="kpi down"><b>2</b><em>跌停</em></div>
@@ -116,16 +129,16 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 </section>
 <h2>1. 一句话总收口</h2>
 <p>今天是强修复扩散日，主交易线从AI算力/硬件/通信链打开，机器人/工业母机/高端制造、电力/电网/新能源跟随扩散；风险不在指数，而在涨停数量很大、炸板也不低，后排普涨和旧强分化不能被误判成同等主线。</p>
-<h2>2. 盘型 / 环境</h2>
-<p>上证指数下跌<span class="pct-down">-0.0</span>，深证成指下跌<span class="pct-down">-0.5</span>，创业板指下跌<span class="pct-down">-0.96</span>，科创50下跌<span class="pct-down">-2.29</span>；市场方向性广度约64.40%，上涨2967家、下跌1526家，属于偏强扩散。正式封住涨停98只，其中明细源非ST封住涨停98只；触及涨停和炸板合计115只，炸板17只，跌停2只。封住涨停数量很大，说明赚钱效应扩散，但炸板和跌停并未消失，盘型更接近强修复扩散，而不是无风险一致高潮。</p>
-<h3>2.5 资金流证据</h3>
+<h2 id="sec-env">2. 盘型 / 环境</h2>
+<p>上证指数基本持平<span class="pct-up">+0.00%</span>，深证成指下跌<span class="pct-down">-0.50%</span>，创业板指下跌<span class="pct-down">-0.96%</span>，科创50下跌<span class="pct-down">-2.29%</span>；市场方向性广度约64.40%，上涨2967家、下跌1526家，属于偏强扩散。正式封住涨停98只，其中明细源非ST封住涨停98只；触及涨停和炸板合计115只，炸板17只，跌停2只。封住涨停数量很大，说明赚钱效应扩散，但炸板和跌停并未消失，盘型更接近强修复扩散，而不是无风险一致高潮。</p>
+<h3 style="border-bottom:2px solid var(--accent);color:var(--accent2);">■ 资金流证据</h3>
 <ul>
 <li>行业/板块净流入：军工装备<span class="money-in">净流入51.71亿</span>；汽车零部件<span class="money-in">净流入34.10亿</span>；消费电子<span class="money-in">净流入22.20亿</span>；通信设备<span class="money-in">净流入13.24亿</span>；贵金属<span class="money-in">净流入11.63亿</span>。</li>
 <li>行业/板块净流出：半导体<span class="money-out">净流出-141亿</span>；电池<span class="money-out">净流出-129亿</span>；能源金属<span class="money-out">净流出-48.47亿</span>；电力<span class="money-out">净流出-46.99亿</span>；电网设备<span class="money-out">净流出-46.90亿</span>。</li>
 <li>活跃股前五（涨）：胜宏科技（<span class="pct-up">+5.87%</span>，成交179.83亿）；东山精密（<span class="pct-up">+0.70%</span>，成交162.03亿）；中际旭创（<span class="pct-up">+0.92%</span>，成交155.99亿）；立讯精密（<span class="pct-up">+3.11%</span>，成交134.42亿）；三花智控（<span class="pct-up">+3.40%</span>，成交121.95亿）。</li>
 <li>活跃股前五（跌）：DR寒武纪（<span class="pct-down">-5.16%</span>，成交203.61亿）；海光信息（<span class="pct-down">-5.85%</span>，成交142.12亿）；新易盛（<span class="pct-down">-1.22%</span>，成交140.19亿）；中国长城（<span class="pct-down">-2.79%</span>，成交134.56亿）；宁德时代（<span class="pct-down">-3.10%</span>，成交133.97亿）。</li>
 </ul>
-<h3>2.6 情绪运行阶段</h3>
+<h3 style="border-bottom:2px solid var(--accent);color:var(--accent2);">■ 情绪运行阶段</h3>
 <p>阶段判定为“强修复扩散”。封住涨停98只、触及涨停和炸板合计115只，连板高度由ST链和非ST高标共同维持。但炸板17只、跌停2只说明扩散后有淘汰，明天更适合验证前排和容量承接，而不是无差别外推后排。</p>
 <p>板块强度排名：
 飞机制造 +1.67%（领涨：航天动力）；次新股 +1.16%（领涨：电科蓝天）；陶瓷行业 +0.91%（领涨：开尔新材）；汽车制造 +0.34%（领涨：精锻科技）；电子信息 +0.29%（领涨：康欣新材）；塑料制品 +0.22%（领涨：大位科技）；物资外贸 +0.18%（领涨：江苏国泰）；仪器仪表 +0.18%（领涨：大族激光）。</p>
@@ -141,93 +154,125 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <tr><td data-label="上一交易日支线">盈峰环境</td><td data-label="昨日代表样本">-0.73%</td><td data-label="今日正式表现"><span class="pct-down">-1.64%</span></td><td data-label="归位">留存 → 环保/公用事业</td></tr><tr><td data-label="上一交易日支线">华电能源</td><td data-label="昨日代表样本">-1.31%</td><td data-label="今日正式表现"><span class="pct-down">-1.31%</span></td><td data-label="归位">留存 → 电力/电网/新能源</td></tr><tr><td data-label="上一交易日支线">狮头股份</td><td data-label="昨日代表样本">-0.92%</td><td data-label="今日正式表现"><span class="pct-down">-0.68%</span></td><td data-label="归位">留存 → 消费/传媒/AI应用</td></tr><tr><td data-label="上一交易日支线">京泉华</td><td data-label="昨日代表样本">+0.73%</td><td data-label="今日正式表现"><span class="pct-up">+0.89%</span></td><td data-label="归位">留存为次级方向</td></tr><tr><td data-label="上一交易日支线">厦工股份</td><td data-label="昨日代表样本">0.00%</td><td data-label="今日正式表现"><span class="pct-down">-1.01%</span></td><td data-label="归位">留存 → 机器人/工业母机/高端制造</td></tr>
 </tbody>
 </table></div>
-<h2>4. 主线 / 次主线 / 活口 / 失败轮动 / 资金撤退方向</h2>
+<h2 id="sec-themes">4. 主线 / 次主线 / 活口 / 失败轮动 / 资金撤退方向</h2>
+<div class="board-section main">
 <h3>AI算力/硬件/通信链（主线）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停73只，高分歧。</li>
 <li>方向成员池：国安股份<span class="pct-up">+10.16%</span>；润建股份<span class="pct-up">+10.00%</span>；传艺科技<span class="pct-up">+10.01%</span>；波导股份<span class="pct-up">+10.02%</span>；通鼎互联<span class="pct-up">+10.01%</span>；铭普光磁<span class="pct-up">+10.00%</span>；共达电声<span class="pct-up">+10.00%</span>；昀冢科技<span class="pct-up">+20.00%</span>；立昂微<span class="pct-up">+9.99%</span>；汇绿生态<span class="pct-up">+10.00%</span>；烽火通信<span class="pct-up">+10.00%</span>；长江通信<span class="pct-up">+9.99%</span>；光迅科技<span class="pct-up">+10.00%</span>；联动科技<span class="pct-up">+17.76%</span>；锴威特<span class="pct-up">+12.64%</span>等。</li>
 <li>裁定：AI算力/硬件/通信链同时出现多个父子标签同向强化，且有连板、趋势中军和20cm弹性共同确认，是今天最完整的主线。</li>
 </ul>
+</div>
+<div class="board-section sub">
 <h3>机器人/工业母机/高端制造（次主线）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停86只，高分歧。</li>
 <li>方向成员池：雷赛智能<span class="pct-up">+10.00%</span>；泰坦股份<span class="pct-up">+10.00%</span>；宝鼎科技<span class="pct-up">+9.98%</span>；鲁信创投<span class="pct-up">+10.01%</span>；卓郎智能<span class="pct-up">+9.98%</span>；巨轮智能<span class="pct-up">+9.97%</span>；五洲新春<span class="pct-up">+10.01%</span>；大业股份<span class="pct-up">+10.04%</span>；贵绳股份<span class="pct-up">+10.03%</span>；日发精机<span class="pct-up">+9.93%</span>；天奇股份<span class="pct-up">+10.00%</span>；恒锋工具<span class="pct-up">+20.01%</span>；华之杰<span class="pct-up">+10.01%</span>；鼎熔岩<span class="pct-up">+20.01%</span>；恒星科技<span class="pct-up">+10.00%</span>等。</li>
 <li>裁定：有连板和涨停扩散，但宽度、资金或容量确认弱于科技硬件，先按次主线处理。</li>
 </ul>
+</div>
+<div class="board-section sub">
 <h3>电力/电网/新能源（次主线）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停48只，高分歧。</li>
 <li>方向成员池：大唐发电<span class="pct-up">+9.92%</span>；兆新股份<span class="pct-up">+10.00%</span>；杭电股份<span class="pct-up">+10.00%</span>；新能泰山<span class="pct-up">+10.06%</span>；温州宏丰<span class="pct-up">+20.00%</span>；钧达股份<span class="pct-up">+10.01%</span>；起帆电缆<span class="pct-up">+7.31%</span>；四方股份<span class="pct-up">+5.94%</span>；甘肃能源<span class="pct-up">+5.75%</span>；安孚科技<span class="pct-up">+5.04%</span>；北京科锐<span class="pct-up">+4.70%</span>；康平科技<span class="pct-up">+4.05%</span>；华电辽能<span class="pct-up">+3.67%</span>；金杨精密<span class="pct-up">+3.48%</span>；崧盛股份<span class="pct-up">+3.39%</span>等。</li>
 <li>裁定：有连板和涨停扩散，但宽度、资金或容量确认弱于科技硬件，先按次主线处理。</li>
 </ul>
+</div>
+<div class="board-section alive">
 <h3>医药/医疗（活口）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停24只，高分歧。</li>
 <li>方向成员池：众生药业<span class="pct-up">+10.00%</span>；达安基因<span class="pct-up">+9.93%</span>；贝瑞基因<span class="pct-up">+10.01%</span>；太龙药业<span class="pct-up">+10.06%</span>；拓新药业<span class="pct-up">+7.78%</span>；奥赛康<span class="pct-up">+5.91%</span>；拱东医疗<span class="pct-up">+5.49%</span>；万泰生物<span class="pct-up">+5.21%</span>；东方生物<span class="pct-up">+4.64%</span>；东星医疗<span class="pct-up">+4.20%</span>；诚意药业<span class="pct-up">+3.02%</span>；维康药业<span class="pct-up">+2.76%</span>；宝莱特<span class="pct-up">+2.75%</span>；华兰股份<span class="pct-up">+2.29%</span>；博拓生物<span class="pct-up">+2.09%</span>等。</li>
 <li>裁定：有强票和链条辨识度，但整体宽度不足，按活口而非主线处理。</li>
 </ul>
+</div>
+<div class="board-section alive">
 <h3>消费/传媒/AI应用（活口）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停14只，高分歧。</li>
-<li>方向成员池：完美世界<span class="pct-up">+10.03%</span>；交大昂立<span class="pct-up">+9.98%</span>；西部牧业<span class="pct-up">+13.42%</span>；新迅达<span class="pct-up">+7.33%</span>；中青宝<span class="pct-up">+6.87%</span>；怡 亚 通<span class="pct-up">+5.08%</span>；宝通科技<span class="pct-up">+2.03%</span>；承德露露<span class="pct-up">+0.89%</span>；迅游科技<span class="pct-up">+0.50%</span>；三人行<span class="pct-down">-0.52%</span>；狮头股份<span class="pct-down">-0.92%</span>；粤 传 媒<span class="pct-down">-1.98%</span>；易点天下<span class="pct-down">-0.23%</span>；引力传媒<span class="pct-up">+3.66%</span>。</li>
+<li>方向成员池：完美世界<span class="pct-up">+10.03%</span>；交大昂立<span class="pct-up">+9.98%</span>；西部牧业<span class="pct-up">+13.42%</span>；新迅达<span class="pct-up">+7.33%</span>；中青宝<span class="pct-up">+6.87%</span>；怡亚通<span class="pct-up">+5.08%</span>；宝通科技<span class="pct-up">+2.03%</span>；承德露露<span class="pct-up">+0.89%</span>；迅游科技<span class="pct-up">+0.50%</span>；三人行<span class="pct-down">-0.52%</span>；狮头股份<span class="pct-down">-0.92%</span>；粤传媒<span class="pct-down">-1.98%</span>；易点天下<span class="pct-down">-0.23%</span>；引力传媒<span class="pct-up">+3.66%</span>。</li>
 <li>裁定：有强票和链条辨识度，但整体宽度不足，按活口而非主线处理。</li>
 </ul>
+</div>
+<div class="board-section alive">
 <h3>商业航天/军工/低空（活口）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停12只，高分歧。</li>
 <li>方向成员池：航天长峰<span class="pct-up">+10.01%</span>；电科蓝天<span class="pct-up">+19.99%</span>；航发科技<span class="pct-up">+10.00%</span>；航天发展<span class="pct-up">+10.01%</span>；航天环宇<span class="pct-up">+14.89%</span>；理工导航<span class="pct-up">+9.28%</span>；炼石航空<span class="pct-up">+6.97%</span>；中国卫星<span class="pct-up">+6.41%</span>；中光学<span class="pct-up">+6.23%</span>；威海广泰<span class="pct-up">+2.92%</span>；六九一二<span class="pct-up">+1.81%</span>；爱乐达<span class="pct-up">+0.81%</span>。</li>
 <li>裁定：有强票和链条辨识度，但整体宽度不足，按活口而非主线处理。</li>
 </ul>
+</div>
+<div class="board-section other">
 <h3>化工/材料（待归因）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停60只，高分歧。</li>
 <li>方向成员池：恒申新材<span class="pct-up">+10.03%</span>；洪通燃气<span class="pct-up">+10.04%</span>；升达林业<span class="pct-up">+9.98%</span>；福莱蒽特<span class="pct-up">+10.01%</span>；光华股份<span class="pct-up">+9.99%</span>；同大股份<span class="pct-up">+8.93%</span>；万盛股份<span class="pct-up">+8.46%</span>；唯特偶<span class="pct-up">+7.38%</span>；海正生材<span class="pct-up">+7.15%</span>；兴福电子<span class="pct-up">+6.78%</span>；雪天盐业<span class="pct-up">+6.04%</span>；远大控股<span class="pct-up">+5.48%</span>；浙江众成<span class="pct-up">+4.95%</span>；唯科科技<span class="pct-up">+4.78%</span>；天通股份<span class="pct-up">+4.22%</span>等。</li>
 </ul>
+</div>
+<div class="board-section other">
 <h3>汽车/零部件（待归因）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停44只，高分歧。</li>
 <li>方向成员池：秦安股份<span class="pct-up">+9.98%</span>；天铭科技<span class="pct-up">+29.97%</span>；祥鑫科技<span class="pct-up">+10.02%</span>；襄阳轴承<span class="pct-up">+10.03%</span>；凌云股份<span class="pct-up">+10.05%</span>；飞龙股份<span class="pct-up">+10.00%</span>；瑞鹄模具<span class="pct-up">+9.99%</span>；精锻科技<span class="pct-up">+19.97%</span>；友升股份<span class="pct-up">+8.12%</span>；长源东谷<span class="pct-up">+7.37%</span>；卡倍亿<span class="pct-up">+5.67%</span>；超捷股份<span class="pct-up">+5.21%</span>；瑞玛精密<span class="pct-up">+5.11%</span>；维科精密<span class="pct-up">+4.78%</span>；斯菱智驱<span class="pct-up">+4.02%</span>等。</li>
 </ul>
+</div>
+<div class="board-section other">
 <h3>房地产/建筑/建材（待归因）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停38只，高分歧。</li>
 <li>方向成员池：华联控股<span class="pct-up">+9.96%</span>；京投发展<span class="pct-up">+10.03%</span>；宁波富达<span class="pct-up">+10.07%</span>；三湘印象<span class="pct-up">+9.96%</span>；上实发展<span class="pct-up">+10.04%</span>；科新发展<span class="pct-up">+10.00%</span>；帝欧水华<span class="pct-up">+10.04%</span>；蒙娜丽莎<span class="pct-up">+9.98%</span>；尤安设计<span class="pct-up">+10.14%</span>；雄塑科技<span class="pct-up">+9.16%</span>；镇海股份<span class="pct-up">+7.98%</span>；全筑股份<span class="pct-up">+6.62%</span>；中设咨询<span class="pct-up">+6.38%</span>；开尔新材<span class="pct-up">+5.31%</span>；中源家居<span class="pct-up">+4.85%</span>等。</li>
 </ul>
+</div>
+<div class="board-section other">
 <h3>独立/待归因（待归因）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停24只，高分歧。</li>
 <li>方向成员池：福达合金<span class="pct-up">+10.00%</span>；南威软件<span class="pct-up">+10.00%</span>；泰晶科技<span class="pct-up">+9.99%</span>；北投科技<span class="pct-up">+10.00%</span>；红板科技<span class="pct-up">+10.00%</span>；江苏国泰<span class="pct-up">+10.00%</span>；圣阳股份<span class="pct-up">+10.00%</span>；山东玻纤<span class="pct-up">+9.99%</span>；康欣新材<span class="pct-up">+10.09%</span>；金海高科<span class="pct-up">+10.00%</span>；澄星股份<span class="pct-up">+9.99%</span>；荣联科技<span class="pct-up">+10.06%</span>；罗曼股份<span class="pct-up">+10.00%</span>；龙高股份<span class="pct-up">+9.99%</span>；仁智股份<span class="pct-up">+10.02%</span>等。</li>
 </ul>
+</div>
+<div class="board-section other">
 <h3>环保/公用事业（待归因）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停11只，高分歧。</li>
 <li>方向成员池：京源环保<span class="pct-up">+13.92%</span>；中兰环保<span class="pct-up">+6.30%</span>；中创环保<span class="pct-up">+3.90%</span>；江南水务<span class="pct-up">+3.12%</span>；荣晟环保<span class="pct-up">+2.99%</span>；华骐环保<span class="pct-up">+2.82%</span>；创元科技<span class="pct-up">+2.23%</span>；华宏科技<span class="pct-up">+1.63%</span>；先河环保<span class="pct-up">+1.14%</span>；严牌股份<span class="pct-up">+0.12%</span>；盈峰环境<span class="pct-down">-0.73%</span>。</li>
 </ul>
+</div>
+<div class="board-section other">
 <h3>纺织/服装（待归因）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停10只，高分歧。</li>
-<li>方向成员池：梦洁股份<span class="pct-up">+9.96%</span>；迎丰股份<span class="pct-up">+10.00%</span>；富春染织<span class="pct-up">+10.00%</span>；聚杰微纤<span class="pct-up">+13.27%</span>；酷特智能<span class="pct-up">+12.12%</span>；天创时尚<span class="pct-up">+7.13%</span>；红蜻蜓<span class="pct-up">+3.83%</span>；XD华升股<span class="pct-up">+1.53%</span>；真爱美家<span class="pct-up">+1.42%</span>；红豆股份<span class="pct-up">+0.71%</span>。</li>
+<li>方向成员池：梦洁股份<span class="pct-up">+9.96%</span>；迎丰股份<span class="pct-up">+10.00%</span>；富春染织<span class="pct-up">+10.00%</span>；聚杰微纤<span class="pct-up">+13.27%</span>；酷特智能<span class="pct-up">+12.12%</span>；天创时尚<span class="pct-up">+7.13%</span>；红蜻蜓<span class="pct-up">+3.83%</span>；华升股<span class="pct-up">+1.53%</span>；真爱美家<span class="pct-up">+1.42%</span>；红豆股份<span class="pct-up">+0.71%</span>。</li>
 </ul>
+</div>
+<div class="board-section other">
 <h3>有色/钢铁/资源（待归因）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停7只，高分歧。</li>
 <li>方向成员池：有研粉材<span class="pct-up">+8.17%</span>；新莱福<span class="pct-up">+4.46%</span>；金洲管道<span class="pct-up">+2.70%</span>；隆达股份<span class="pct-up">+0.80%</span>；龙磁科技<span class="pct-up">+0.09%</span>；深圳新星<span class="pct-down">-0.51%</span>；华达新材<span class="pct-down">-9.85%</span>。</li>
 </ul>
+</div>
+<div class="board-section other">
 <h3>交通/物流（待归因）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停5只，高分歧。</li>
 <li>方向成员池：宏川智慧<span class="pct-up">+10.01%</span>；北部湾港<span class="pct-up">+9.98%</span>；海通发展<span class="pct-up">+6.53%</span>；五洲交通<span class="pct-up">+5.66%</span>；音飞储存<span class="pct-up">+0.42%</span>。</li>
 </ul>
+</div>
+<div class="board-section other">
 <h3>金融（待归因）</h3>
 <ul>
 <li>板块量价：净流入-36900，高强/近涨停4只，高分歧。</li>
 <li>方向成员池：建元信托<span class="pct-up">+1.99%</span>；香溢融通<span class="pct-up">+1.65%</span>；仁东控股<span class="pct-up">+0.36%</span>；长江证券<span class="pct-down">-1.44%</span>。</li>
 </ul>
+</div>
+<div class="board-section other">
 <h3>农业/养殖（待归因）</h3>
 <ul>
 <li>板块量价：板块资金数据未覆盖，高强/近涨停3只，高分歧。</li>
 <li>方向成员池：粤海饲料<span class="pct-up">+6.79%</span>；国投中鲁<span class="pct-up">+2.91%</span>；祖名股份<span class="pct-up">+2.19%</span>。</li>
 </ul>
+</div>
 <h3>4.5 连板高度单元</h3>
 <div class="table-wrap"><table>
 <thead><tr>
@@ -242,16 +287,15 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <tr><td data-label="股票">福达合金</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 1.18%，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">一字连板风险</td></tr><tr><td data-label="股票">大业股份</td><td data-label="今日状态"><span class="pct-up">+10.04%</span>，回封涨停</td><td data-label="换手/昨换手">换手 16.87%，昨换手 N/A</td><td data-label="所属方向">机器人/工业母机/高端制造</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">波导股份</td><td data-label="今日状态"><span class="pct-up">+10.02%</span>，回封涨停</td><td data-label="换手/昨换手">换手 7.76%，昨换手 N/A</td><td data-label="所属方向">AI算力/硬件/通信链</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">杭电股份</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 13.51%，昨换手 N/A</td><td data-label="所属方向">电力/电网/新能源</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">大唐发电</td><td data-label="今日状态"><span class="pct-up">+9.92%</span>，回封涨停</td><td data-label="换手/昨换手">换手 6.46%，昨换手 N/A</td><td data-label="所属方向">电力/电网/新能源</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">新能泰山</td><td data-label="今日状态"><span class="pct-up">+10.06%</span>，回封涨停</td><td data-label="换手/昨换手">换手 23.40%，昨换手 N/A</td><td data-label="所属方向">电力/电网/新能源</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">高潮接力风险</td></tr><tr><td data-label="股票">宏川智慧</td><td data-label="今日状态"><span class="pct-up">+10.01%</span>，回封涨停</td><td data-label="换手/昨换手">换手 4.28%，昨换手 N/A</td><td data-label="所属方向">交通/物流</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">通鼎互联</td><td data-label="今日状态"><span class="pct-up">+10.01%</span>，回封涨停</td><td data-label="换手/昨换手">换手 9.20%，昨换手 N/A</td><td data-label="所属方向">AI算力/硬件/通信链</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">众生药业</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 4.70%，昨换手 N/A</td><td data-label="所属方向">医药/医疗</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">红板科技</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 2.38%，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">一字连板风险</td></tr><tr><td data-label="股票">南威软件</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 2.56%，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">一字连板风险</td></tr><tr><td data-label="股票">北投科技</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 4.35%，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">共达电声</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 11.73%，昨换手 N/A</td><td data-label="所属方向">AI算力/硬件/通信链</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">润建股份</td><td data-label="今日状态"><span class="pct-up">+10.00%</span>，回封涨停</td><td data-label="换手/昨换手">换手 7.21%，昨换手 N/A</td><td data-label="所属方向">AI算力/硬件/通信链</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">泰晶科技</td><td data-label="今日状态"><span class="pct-up">+9.99%</span>，回封涨停</td><td data-label="换手/昨换手">换手 5.09%，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">山东玻纤</td><td data-label="今日状态"><span class="pct-up">+9.99%</span>，回封涨停</td><td data-label="换手/昨换手">换手 N/A，昨换手 N/A</td><td data-label="所属方向">独立/待归因</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr><tr><td data-label="股票">宝鼎科技</td><td data-label="今日状态"><span class="pct-up">+9.98%</span>，回封涨停</td><td data-label="换手/昨换手">换手 2.82%，昨换手 N/A</td><td data-label="所属方向">机器人/工业母机/高端制造</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">一字连板风险</td></tr><tr><td data-label="股票">巨轮智能</td><td data-label="今日状态"><span class="pct-up">+9.97%</span>，回封涨停</td><td data-label="换手/昨换手">换手 9.88%，昨换手 N/A</td><td data-label="所属方向">机器人/工业母机/高端制造</td><td data-label="板块资金流">按所属方向资金与分歧度跟踪</td><td data-label="次日风险判定">分歧接力</td></tr>
 </tbody>
 </table></div>
-<h2>5. 过程状态分层</h2>
-<p><p>今日早盘，AI算力/硬件/通信链方向快速集结，<span class="pct-up">烽火通信</span>、<span class="pct-up">长光华芯</span>等高辨识度个股开盘后迅速封板或大幅拉升，带动通鼎互联、润建股份等多只2连板跟风上板，呈现强修复扩散特征。同时，机器人/工业母机方向以绿的谐波为情绪锚震荡走强，<span class="pct-up">恒锋工具</span>放量20%封板稳固强度。电力方向大唐发电弱转强换手板，激活板块补涨。盘中可见，汽车零部件方向在精锻科技、天铭科技等业绩预期驱动下批量涨停，消费电子受益于东山精密、立讯精密等资金流入而情绪外溢，军工受电科蓝天19.99%涨停带动出现异动。然而，半导体板块持续遭资金净卖出，寒武纪、海光信息等核心标的跌幅扩大，拖累科创50指数显著走弱。尾盘阶段，获利盘兑现意愿增强，炸板个股达17只，新能泰山等高位换手板分歧明显，但指数并未出现跳水，部分资金回流医药、公用事业等防御活口，众生药业、京源环保等尾盘封稳，资金在扩散中开始重点向前排收敛。</p></p>
-<h2>6. 四分层</h2>
+<h2>5. 过程状态分层</h2><p>今日涨停98只，触及涨停+炸板合计115只。早盘通信/算力/硬件方向率先确认，盘中机器人/电力/传媒应用扩散，尾盘分化回落至后排普涨票。全天呈强扩散格局，但炸板17只说明分歧持续，次日重点看前排锚定和容量承接。</p>
+<h2 id="sec-layers">6. 四分层</h2>
 <h3>AI算力/硬件/通信链</h3>
 <ul>
 <li><strong>情绪锚</strong>：长光华芯（<span class="pct-up">+11.71%</span>，换手 8.40%）—— 量价裁定：缩量锁筹。</li>
 <li><strong>强度锚</strong>：烽火通信（<span class="pct-up">+10.00%</span>，换手 9.71%）—— 量价裁定：缩量锁筹。</li>
 <li><strong>次核心</strong>：光迅科技（<span class="pct-up">+10.00%</span>，换手 8.11%）—— 量价裁定：缩量锁筹。；汇绿生态（<span class="pct-up">+10.00%</span>，换手 6.90%）—— 量价裁定：缩量锁筹。；浪潮信息（<span class="pct-up">+4.42%</span>，换手 7.71%）—— 量价裁定：缩量承接。</li>
 <li><strong>活口</strong>：中国长城（<span class="pct-down">-3.71%</span>，换手 17.89%）—— 量价裁定：放量承接。；长电科技（<span class="pct-up">+4.08%</span>，换手 5.34%）—— 量价裁定：缩量承接。；国科微（<span class="pct-up">+6.75%</span>，换手 6.90%）—— 量价裁定：缩量承接。</li>
-<li>未进入四分层：昀冢科技、联芸科技、西安奕材-U、通鼎互联、炬光科技、美利云、富满微、润建股份、共达电声、东方国信<span class="collapse-content" id="uncl_AI算力/硬件/">有研新材、沪硅产业、大为股份、长江通信、锴威特、同有科技、达梦数据、传艺科技、联动科技、优迅股份、铭普光磁、普冉股份、波导股份、中润光学、国安股份、宇瞳光学、天阳科技、有研硅、启明星辰、峰岹科技、先导基电、上海合晶、中嘉博创、卓易信息、裕太微-U、立昂微、捷安高科、智微智能、盛视科技、中威电子、纳芯微、和林微纳、赛意信息、灿瑞科技、跨境通、昂瑞微-UW、阿石创、安博通、盛景微、恒烁股份、华海诚科、吉宏股份、天迈科技、苏州科达、安路科技、佳华科技、友车科技、龙迅股份、晶华微、罗普特、广立微、博实结、慧博云通、杰创智能、凯旺科技</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl_AI算力/硬件/');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(55只)'">展开全部(55只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
+<li>未进入四分层：昀冢科技、联芸科技、西安奕材-U、通鼎互联、炬光科技、美利云、富满微、润建股份、共达电声、东方国信<span class="collapse-content" id="uncl7">有研新材、沪硅产业、大为股份、长江通信、锴威特、同有科技、达梦数据、传艺科技、联动科技、优迅股份、铭普光磁、普冉股份、波导股份、中润光学、国安股份、宇瞳光学、天阳科技、有研硅、启明星辰、峰岹科技、先导基电、上海合晶、中嘉博创、卓易信息、裕太微-U、立昂微、捷安高科、智微智能、盛视科技、中威电子、纳芯微、和林微纳、赛意信息、灿瑞科技、跨境通、昂瑞微-UW、阿石创、安博通、盛景微、恒烁股份、华海诚科、吉宏股份、天迈科技、苏州科达、安路科技、佳华科技、友车科技、龙迅股份、晶华微、罗普特、广立微、博实结、慧博云通、杰创智能、凯旺科技</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl7');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(55只)'">展开全部(55只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
 </ul>
 <h3>机器人/工业母机/高端制造</h3>
 <ul>
@@ -259,7 +303,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <li><strong>强度锚</strong>：恒锋工具（<span class="pct-up">+20.01%</span>，换手 12.04%）—— 量价裁定：放量封板。</li>
 <li><strong>次核心</strong>：五洲新春（<span class="pct-up">+10.01%</span>，换手 9.43%）—— 量价裁定：缩量锁筹。；航天动力（<span class="pct-up">+10.01%</span>，换手 10.01%）—— 量价裁定：放量封板。；巨力索具（<span class="pct-down">-0.05%</span>，换手 26.19%）—— 量价裁定：放量承接。</li>
 <li><strong>活口</strong>：华兴源创（<span class="pct-up">+12.38%</span>，换手 4.67%）—— 量价裁定：缩量锁筹。；雷赛智能（<span class="pct-up">+10.00%</span>，换手 10.15%）—— 量价裁定：放量封板。；巨轮智能（<span class="pct-up">+9.97%</span>，换手 9.88%）—— 量价裁定：缩量锁筹。</li>
-<li>未进入四分层：鼎熔岩、天奇股份、恒星科技、大业股份、鲁信创投、南兴股份、卓郎智能、华伍股份、日发精机、创力集团<span class="collapse-content" id="uncl_机器人/工业母机">昊志机电、东方精工、宝鼎科技、创世纪、华之杰、沃尔德、泰坦股份、建设机械、贵绳股份、拓斯达、凌云光、赛福天、恒而达、九州一轨、国机精工、海天精工、宇环数控、展鹏科技、华光新材、劲拓股份、集智股份、电光科技、博杰股份、华东重机、大宏立、恒工精密、乔锋智能、永贵电器、海昌新材、磁谷科技、佳力图、禾川科技、景业智能、洪田股份、深科达、瑞松科技、美畅股份、汉钟精机、越剑智能、厦工股份、国盛智科、博实股份、建科智能、三超新材、杭齿前进、格力博、浙江力诺、南华仪器、永和智控、江苏北人、快克智能、瑞晨环保、瑞凌股份、金帝股份、美腾科技、汇成真空、浙海德曼、工大科雅、通力科技、天永智能、弘亚数控、通用电梯、思林杰、金道科技、固高科技、汉邦科技、长龄液压、乐创技术</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl_机器人/工业母机');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(68只)'">展开全部(68只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
+<li>未进入四分层：鼎熔岩、天奇股份、恒星科技、大业股份、鲁信创投、南兴股份、卓郎智能、华伍股份、日发精机、创力集团<span class="collapse-content" id="uncl15">昊志机电、东方精工、宝鼎科技、创世纪、华之杰、沃尔德、泰坦股份、建设机械、贵绳股份、拓斯达、凌云光、赛福天、恒而达、九州一轨、国机精工、海天精工、宇环数控、展鹏科技、华光新材、劲拓股份、集智股份、电光科技、博杰股份、华东重机、大宏立、恒工精密、乔锋智能、永贵电器、海昌新材、磁谷科技、佳力图、禾川科技、景业智能、洪田股份、深科达、瑞松科技、美畅股份、汉钟精机、越剑智能、厦工股份、国盛智科、博实股份、建科智能、三超新材、杭齿前进、格力博、浙江力诺、南华仪器、永和智控、江苏北人、快克智能、瑞晨环保、瑞凌股份、金帝股份、美腾科技、汇成真空、浙海德曼、工大科雅、通力科技、天永智能、弘亚数控、通用电梯、思林杰、金道科技、固高科技、汉邦科技、长龄液压、乐创技术</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl15');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(68只)'">展开全部(68只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
 </ul>
 <h3>电力/电网/新能源</h3>
 <ul>
@@ -267,7 +311,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <li><strong>强度锚</strong>：温州宏丰（<span class="pct-up">+20.00%</span>，换手 19.59%）—— 量价裁定：放量封板。</li>
 <li><strong>次核心</strong>：杭电股份（<span class="pct-up">+10.00%</span>，换手 13.51%）—— 量价裁定：放量封板。；钧达股份（<span class="pct-up">+10.01%</span>，换手 9.43%）—— 量价裁定：缩量锁筹。；华电辽能（<span class="pct-up">+3.67%</span>，换手 21.26%）—— 量价裁定：放量承接。</li>
 <li><strong>活口</strong>：华电能源（<span class="pct-down">-1.31%</span>，换手 6.43%）—— 量价裁定：缩量承接。；四方股份（<span class="pct-up">+5.94%</span>，换手 3.72%）—— 量价裁定：缩量承接。；新能泰山（<span class="pct-up">+10.06%</span>，换手 23.40%）—— 量价裁定：放量封板。</li>
-<li>未进入四分层：兆新股份、德方纳米、科华数据、甘肃能源、维科技术、容百科技、安孚科技、震裕科技、星源材质、禾望电气<span class="collapse-content" id="uncl_电力/电网/新能">中国广核、浙能电力、北京科锐、蔚蓝锂芯、安彩高科、丰元股份、华盛昌、宝光股份、苏州固锝、大连热电、长城科技、中电鑫龙、起帆电缆、德新科技、杭可科技、爱科赛博、振华新材、康平科技、金冠电气、杭州柯林、昆工科技、金杨精密、崧盛股份、金时科技、申昊科技、德福科技、杭州热电、盟固利、瑞泰新材、天力锂能</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl_电力/电网/新能');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(30只)'">展开全部(30只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
+<li>未进入四分层：兆新股份、德方纳米、科华数据、甘肃能源、维科技术、容百科技、安孚科技、震裕科技、星源材质、禾望电气<span class="collapse-content" id="uncl23">中国广核、浙能电力、北京科锐、蔚蓝锂芯、安彩高科、丰元股份、华盛昌、宝光股份、苏州固锝、大连热电、长城科技、中电鑫龙、起帆电缆、德新科技、杭可科技、爱科赛博、振华新材、康平科技、金冠电气、杭州柯林、昆工科技、金杨精密、崧盛股份、金时科技、申昊科技、德福科技、杭州热电、盟固利、瑞泰新材、天力锂能</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl23');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(30只)'">展开全部(30只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
 </ul>
 <h3>医药/医疗</h3>
 <ul>
@@ -275,14 +319,14 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <li><strong>强度锚</strong>：万泰生物（<span class="pct-up">+5.21%</span>，换手 0.83%）—— 量价裁定：缩量。</li>
 <li><strong>次核心</strong>：达安基因（<span class="pct-up">+9.93%</span>，换手 5.46%）—— 量价裁定：缩量锁筹。；太龙药业（<span class="pct-up">+10.06%</span>，换手 7.92%）—— 量价裁定：缩量锁筹。；贝瑞基因（<span class="pct-up">+10.01%</span>，换手 5.87%）—— 量价裁定：缩量锁筹。</li>
 <li><strong>活口</strong>：奥赛康（<span class="pct-up">+5.91%</span>，换手 2.96%）—— 量价裁定：缩量。；拓新药业（<span class="pct-up">+7.78%</span>，换手 N/A）—— 量价裁定：缩量。；东方生物（<span class="pct-up">+4.64%</span>，换手 3.94%）—— 量价裁定：缩量承接。</li>
-<li>未进入四分层：宝莱特、拱东医疗、诚意药业、博拓生物、维康药业、欧林生物、东星医疗、赛托生物、亚宝药业、正川股份<span class="collapse-content" id="uncl_医药/医疗">康众医疗、华兰股份、三圣股份、药康生物、南卫股份、百诚医药</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl_医药/医疗');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(6只)'">展开全部(6只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
+<li>未进入四分层：宝莱特、拱东医疗、诚意药业、博拓生物、维康药业、欧林生物、东星医疗、赛托生物、亚宝药业、正川股份<span class="collapse-content" id="uncl31">康众医疗、华兰股份、三圣股份、药康生物、南卫股份、百诚医药</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl31');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(6只)'">展开全部(6只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
 </ul>
 <h3>消费/传媒/AI应用</h3>
 <ul>
-<li><strong>情绪锚</strong>：怡 亚 通（<span class="pct-up">+5.08%</span>，换手 14.76%）—— 量价裁定：放量承接。</li>
+<li><strong>情绪锚</strong>：怡亚通（<span class="pct-up">+5.08%</span>，换手 14.76%）—— 量价裁定：放量承接。</li>
 <li><strong>强度锚</strong>：完美世界（<span class="pct-up">+10.03%</span>，换手 1.91%）—— 量价裁定：缩量封板。</li>
 <li><strong>次核心</strong>：西部牧业（<span class="pct-up">+13.42%</span>，换手 13.09%）—— 量价裁定：放量封板。；中青宝（<span class="pct-up">+6.87%</span>，换手 28.44%）—— 量价裁定：放量承接。；引力传媒（<span class="pct-up">+3.66%</span>，换手 22.95%）—— 量价裁定：放量承接。</li>
-<li><strong>活口</strong>：新迅达（<span class="pct-up">+7.33%</span>，换手 11.18%）—— 量价裁定：放量承接。；交大昂立（<span class="pct-up">+9.98%</span>，换手 3.35%）—— 量价裁定：缩量锁筹。；粤 传 媒（<span class="pct-down">-1.98%</span>，换手 8.28%）—— 量价裁定：缩量承接。</li>
+<li><strong>活口</strong>：新迅达（<span class="pct-up">+7.33%</span>，换手 11.18%）—— 量价裁定：放量承接。；交大昂立（<span class="pct-up">+9.98%</span>，换手 3.35%）—— 量价裁定：缩量锁筹。；粤传媒（<span class="pct-down">-1.98%</span>，换手 8.28%）—— 量价裁定：缩量承接。</li>
 <li>未进入四分层：狮头股份、宝通科技、迅游科技、承德露露、三人行、易点天下，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
 </ul>
 <h3>商业航天/军工/低空</h3>
@@ -299,7 +343,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <li><strong>强度锚</strong>：东材科技（<span class="pct-up">+2.08%</span>，换手 10.62%）—— 量价裁定：放量承接。</li>
 <li><strong>次核心</strong>：西部材料（<span class="pct-down">-1.40%</span>，换手 16.67%）—— 量价裁定：放量承接。；石英股份（<span class="pct-up">+3.44%</span>，换手 7.18%）—— 量价裁定：缩量承接。；兴福电子（<span class="pct-up">+6.78%</span>，换手 5.32%）—— 量价裁定：缩量承接。</li>
 <li><strong>活口</strong>：斯迪克（<span class="pct-up">+2.37%</span>，换手 4.03%）—— 量价裁定：缩量承接。；升达林业（<span class="pct-up">+9.98%</span>，换手 9.34%）—— 量价裁定：缩量锁筹。；航锦科技（<span class="pct-up">+1.51%</span>，换手 15.46%）—— 量价裁定：放量承接。</li>
-<li>未进入四分层：飞凯材料、三孚股份、恒申新材、万盛股份、中毅达、光华股份、振华股份、同大股份、雪天盐业、洪通燃气<span class="collapse-content" id="uncl_化工/材料">福莱蒽特、浙江众成、水发燃气、海正生材、远大控股、宏昌电子、中化国际、唯特偶、东方材料、恒大高新、国恩股份、中欣氟材、阿拉丁、震安科技、建发股份、三孚新科、菲沃泰、杭州高新、万朗磁塑、德邦科技、优彩资源、常青科技、唯科科技、杭华股份、天承科技、道恩股份、格林达、浙商中拓、安道麦A、聚石化学、华软科技、日科化学、元琛科技、德冠新材、键邦股份、凯伦股份、华康股份、安 纳 达、莱尔科技、赛特新材、力量钻石、凌玮科技</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl_化工/材料');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(42只)'">展开全部(42只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
+<li>未进入四分层：飞凯材料、三孚股份、恒申新材、万盛股份、中毅达、光华股份、振华股份、同大股份、雪天盐业、洪通燃气<span class="collapse-content" id="uncl55">福莱蒽特、浙江众成、水发燃气、海正生材、远大控股、宏昌电子、中化国际、唯特偶、东方材料、恒大高新、国恩股份、中欣氟材、阿拉丁、震安科技、建发股份、三孚新科、菲沃泰、杭州高新、万朗磁塑、德邦科技、优彩资源、常青科技、唯科科技、杭华股份、天承科技、道恩股份、格林达、浙商中拓、安道麦A、聚石化学、华软科技、日科化学、元琛科技、德冠新材、键邦股份、凯伦股份、华康股份、安纳达、莱尔科技、赛特新材、力量钻石、凌玮科技</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl55');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(42只)'">展开全部(42只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
 </ul>
 <h3>汽车/零部件</h3>
 <ul>
@@ -307,15 +351,15 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <li><strong>强度锚</strong>：飞龙股份（<span class="pct-up">+10.00%</span>，换手 8.23%）—— 量价裁定：缩量锁筹。</li>
 <li><strong>次核心</strong>：新泉股份（<span class="pct-up">+3.15%</span>，换手 9.20%）—— 量价裁定：缩量承接。；天铭科技（<span class="pct-up">+29.97%</span>，换手 N/A）—— 量价裁定：缩量封板。；模塑科技（<span class="pct-up">+6.93%</span>，换手 12.99%）—— 量价裁定：放量承接。</li>
 <li><strong>活口</strong>：襄阳轴承（<span class="pct-up">+10.03%</span>，换手 12.18%）—— 量价裁定：放量封板。；凌云股份（<span class="pct-up">+10.05%</span>，换手 4.96%）—— 量价裁定：缩量锁筹。；均胜电子（<span class="pct-up">+0.58%</span>，换手 3.89%）—— 量价裁定：缩量承接。</li>
-<li>未进入四分层：长源东谷、祥鑫科技、瑞鹄模具、华懋科技、友升股份、秦安股份、腾龙股份、信质集团、卡倍亿、肇民科技<span class="collapse-content" id="uncl_汽车/零部件">瑞玛精密、英搏尔、艾可蓝、联诚精密、欣锐科技、超捷股份、天成自控、汇通控股、登云股份、维科精密、继峰股份、兴瑞科技、斯菱智驱、华安鑫创、东风科技、福赛科技、金钟股份、嵘泰股份、奥联电子、宁波方正、长华集团、中捷精工、中自科技、壹连科技、盛帮股份、溯联股份</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl_汽车/零部件');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(26只)'">展开全部(26只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
+<li>未进入四分层：长源东谷、祥鑫科技、瑞鹄模具、华懋科技、友升股份、秦安股份、腾龙股份、信质集团、卡倍亿、肇民科技<span class="collapse-content" id="uncl63">瑞玛精密、英搏尔、艾可蓝、联诚精密、欣锐科技、超捷股份、天成自控、汇通控股、登云股份、维科精密、继峰股份、兴瑞科技、斯菱智驱、华安鑫创、东风科技、福赛科技、金钟股份、嵘泰股份、奥联电子、宁波方正、长华集团、中捷精工、中自科技、壹连科技、盛帮股份、溯联股份</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl63');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(26只)'">展开全部(26只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
 </ul>
 <h3>房地产/建筑/建材</h3>
 <ul>
 <li><strong>情绪锚</strong>：再升科技（<span class="pct-up">+3.35%</span>，换手 19.82%）—— 量价裁定：放量承接。</li>
 <li><strong>强度锚</strong>：衢州发展（<span class="pct-up">+0.59%</span>，换手 5.57%）—— 量价裁定：缩量承接。</li>
-<li><strong>次核心</strong>：金 螳 螂（<span class="pct-down">-4.76%</span>，换手 17.63%）—— 量价裁定：放量承接。；京投发展（<span class="pct-up">+10.03%</span>，换手 4.68%）—— 量价裁定：缩量锁筹。；华联控股（<span class="pct-up">+9.96%</span>，换手 6.90%）—— 量价裁定：缩量锁筹。</li>
+<li><strong>次核心</strong>：金螳螂（<span class="pct-down">-4.76%</span>，换手 17.63%）—— 量价裁定：放量承接。；京投发展（<span class="pct-up">+10.03%</span>，换手 4.68%）—— 量价裁定：缩量锁筹。；华联控股（<span class="pct-up">+9.96%</span>，换手 6.90%）—— 量价裁定：缩量锁筹。</li>
 <li><strong>活口</strong>：苏州高新（<span class="pct-up">+2.18%</span>，换手 17.52%）—— 量价裁定：放量承接。；雄塑科技（<span class="pct-up">+9.16%</span>，换手 8.28%）—— 量价裁定：缩量承接。；上实发展（<span class="pct-up">+10.04%</span>，换手 2.21%）—— 量价裁定：缩量封板。</li>
-<li>未进入四分层：宁波富达、三湘印象、科新发展、帝欧水华、尤安设计、蒙娜丽莎、镇海股份、全筑股份、万通发展、柏诚股份<span class="collapse-content" id="uncl_房地产/建筑/建">开尔新材、上海港湾、杰恩股份、中新集团、扬子新材、中源家居、中旗新材、中设咨询、京能置业、设研院、筑博设计、金 融 街、勘设股份、测绘股份、中天精装、矩阵股份、森泰股份、大龙地产、霍普股份、豪尔赛</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl_房地产/建筑/建');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(20只)'">展开全部(20只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
+<li>未进入四分层：宁波富达、三湘印象、科新发展、帝欧水华、尤安设计、蒙娜丽莎、镇海股份、全筑股份、万通发展、柏诚股份<span class="collapse-content" id="uncl71">开尔新材、上海港湾、杰恩股份、中新集团、扬子新材、中源家居、中旗新材、中设咨询、京能置业、设研院、筑博设计、金融街、勘设股份、测绘股份、中天精装、矩阵股份、森泰股份、大龙地产、霍普股份、豪尔赛</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl71');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(20只)'">展开全部(20只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
 </ul>
 <h3>独立/待归因</h3>
 <ul>
@@ -323,7 +367,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <li><strong>强度锚</strong>：大位科技（<span class="pct-up">+10.03%</span>，换手 21.76%）—— 量价裁定：放量封板。</li>
 <li><strong>次核心</strong>：圣阳股份（<span class="pct-up">+10.00%</span>，换手 18.45%）—— 量价裁定：放量封板。；红板科技（<span class="pct-up">+10.00%</span>，换手 2.38%）—— 量价裁定：缩量封板。；中国软件（<span class="pct-up">+10.00%</span>，换手 3.48%）—— 量价裁定：缩量锁筹。</li>
 <li><strong>活口</strong>：东田微（<span class="pct-up">+20.00%</span>，换手 N/A）—— 量价裁定：缩量封板。；澄星股份（<span class="pct-up">+9.99%</span>，换手 11.76%）—— 量价裁定：放量封板。；泰晶科技（<span class="pct-up">+9.99%</span>，换手 5.09%）—— 量价裁定：缩量锁筹。</li>
-<li>未进入四分层：丽岛新材、江苏国泰、仁智股份、荣联科技、北投科技、金海高科、榕基软件、武进不锈、珠海中富、南威软件<span class="collapse-content" id="uncl_独立/待归因">安邦护卫、福达合金、康欣新材、山东玻纤、罗曼股份、龙高股份</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl_独立/待归因');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(6只)'">展开全部(6只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
+<li>未进入四分层：丽岛新材、江苏国泰、仁智股份、荣联科技、北投科技、金海高科、榕基软件、武进不锈、珠海中富、南威软件<span class="collapse-content" id="uncl79">安邦护卫、福达合金、康欣新材、山东玻纤、罗曼股份、龙高股份</span><span class="collapse-toggle" onclick="var e=document.getElementById('uncl79');e.classList.toggle('open');this.textContent=e.classList.contains('open')?'收起':'展开全部(6只)'">展开全部(6只)</span>，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
 </ul>
 <h3>环保/公用事业</h3>
 <ul>
@@ -338,7 +382,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <li><strong>情绪锚</strong>：酷特智能（<span class="pct-up">+12.12%</span>，换手 21.33%）—— 量价裁定：放量封板。</li>
 <li><strong>强度锚</strong>：聚杰微纤（<span class="pct-up">+13.27%</span>，换手 10.13%）—— 量价裁定：放量封板。</li>
 <li><strong>次核心</strong>：梦洁股份（<span class="pct-up">+9.96%</span>，换手 4.70%）—— 量价裁定：缩量锁筹。；天创时尚（<span class="pct-up">+7.13%</span>，换手 5.24%）—— 量价裁定：缩量承接。；迎丰股份（<span class="pct-up">+10.00%</span>，换手 N/A）—— 量价裁定：缩量封板。</li>
-<li><strong>活口</strong>：富春染织（<span class="pct-up">+10.00%</span>，换手 N/A）—— 量价裁定：缩量封板。；XD华升股（<span class="pct-up">+1.53%</span>，换手 10.38%）—— 量价裁定：放量承接。；红蜻蜓（<span class="pct-up">+3.83%</span>，换手 3.81%）—— 量价裁定：缩量承接。</li>
+<li><strong>活口</strong>：富春染织（<span class="pct-up">+10.00%</span>，换手 N/A）—— 量价裁定：缩量封板。；华升股（<span class="pct-up">+1.53%</span>，换手 10.38%）—— 量价裁定：放量承接。；红蜻蜓（<span class="pct-up">+3.83%</span>，换手 3.81%）—— 量价裁定：缩量承接。</li>
 <li>未进入四分层：真爱美家、红豆股份，原因是跟风、掉队、无更强量价确认或仅链条归因。</li>
 </ul>
 <h3>有色/钢铁/资源</h3>
@@ -367,15 +411,15 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 <li><strong>次核心</strong>：祖名股份（<span class="pct-up">+2.19%</span>，换手 2.18%）—— 量价裁定：缩量。</li>
 </ul>
 <h2>7. 角色层总收口</h2>
-<p><p>今日连板高度由4连板<span class="pct-up">福达合金</span>（一字型）维持表象，实际换手情绪高度落在3连板的<span class="pct-up">大业股份</span>（机器人）、<span class="pct-up">大唐发电</span>（电力）等方向；方向强度则被AI算力/通信链的<span class="pct-up">烽火通信</span>（强度锚缩量板）和机器人方向的<span class="pct-up">恒锋工具</span>（20%放量板）共同拿走。扩散留存方向上，AI算力/通信链、机器人/工业母机、电力三大方向形成了较完整的梯队和锚定结构，质量较高，但板块内部炸板率上升，淘汰赛苗头初现；医药、消费/AI应用以活口形式存在，强度稍逊，更多体现防御属性；半导体高位承压，未能进入扩散，反而成为资金流出重灾区。总体看，情绪扩散后已进入临界期，前排承接能力是后市核心，不可无差别外推后排。</p></p>
+<p>待AI生成。</p>
 <h2>8. 事实依据</h2>
-<p><p>关键事实包括：①指数层面分化，上证指数收平，深成指-0.5%，创业板指-0.96%，科创50大跌2.29%，权重股拖累明显；②市场广度维持高位，上涨家数2967家，占比64.4%，平均涨跌幅+0.90%，中位数+0.64%，体现普涨但权重承压；③涨停98只（非ST），炸板17只，封板率约85%，跌停仅2只，情绪处于强修复扩散阶段；④资金层面，行业净流入前五为军工装备51.71亿、汽车零部件34.10亿、消费电子22.20亿等，半导体净流出141亿居首，电池、能源金属等也遭大幅流出，显示资金从高拥挤赛道向低位新方向腾挪；⑤连板生态上，4板1只（一字），3板5只（分属机器人、AI、电力），2板9只，连板梯队完整，高位未断层；⑥板块强度方面，AI算力/硬件/通信链含73只个股，强度锚烽火通信+10.00%缩量板，情绪锚长光华芯+11.71%锁筹；机器人方向86只，恒锋工具+20.01%放量封板；电力方向48只，大唐发电+9.92%三连板，均具备主线条件。</p></p>
+<p>待AI生成。</p>
 <h2>9. 原因拆解</h2>
-<p><p>AI算力/硬件/通信链成为主线，直接驱动在于前期AI内部高切低的需要：半导体方向积累大量获利盘后出现明显资金流出，而相对低位的通信设备、算力光模块等获得溢出资金，加之光迅科技、中际旭创等中军品种容量承接良好，形成了以烽火通信为强度锚的强扩散。机器人/工业母机方向则受益于产业政策持续催化及绿的谐波等机构中军的趋势稳定，今日恒锋工具20%涨停打开了弹性空间，吸引短线资金挖掘低位补涨，板块规模达86只，成为次主线。电力/电网/新能源方向在夏季用电高峰预期和国企改革题材叠加下，由大唐发电低价连板打出高度，温州宏丰20%跟随，但板块内部分化较大，更倾向于过渡性热点。医药、消费等方向更多是资金防御性选择，在指数承压时作为活口存在，缺乏成为主线的充足催化。原主线半导体因短期拥挤度过高、寒武纪等核心标的放量下杀，反而成为市场风格切换的牺牲品。</p></p>
+<p>待AI生成。</p>
 <h2>10. 盘中判断修正 + 次日观察与证伪</h2>
-<p><p>盘中易出现两大类误判：一是因科创50及半导体权重股深跌，线性外推全市场将大幅走弱，但收盘数据显示上涨家数近3000家，情绪呈现典型的“指数弱、情绪强”格局，修正为结构性修复扩散而非全面走弱；二是早盘AI、机器人、电力等方向集中爆发后，容易认为修复已全面扩散，但尾盘炸板率升至14.8%，新能泰山等高换手板分歧加剧，修正为扩散已近后半程，内部淘汰已然开始。次日需要证伪的关键点：①AI方向情绪锚长光华芯和强度锚烽火通信是否继续缩量或温和断板，若前排出现炸板且无修复，则后排淘汰风险加剧；②机器人方向恒锋工具能否连板或保持重心上移，绿的是否有溢价，若核心大票回调同时梯队断层，方向强度将被证伪；③半导体能否出现止跌信号，寒武纪、海光信息若继续放量破位，则可能拖累整个科技成长风格，进而压制市场风险偏好；④整体涨停家数和炸板数量变化，若次日涨停数明显萎缩且炸板率上升，则情绪从强修复可能转入分歧甚至退潮。</p></p>
+<p>待AI生成。</p>
 <h2>11. 次日市场观察摘要</h2>
-<p><p>次日重点观察两组验证信号及一个结构信号。第一组：AI算力/通信链的<a>前排承接</a>，尤其是烽火通信、长光华芯的溢价与换手状态，若两者出现高位放量滞涨或早盘炸板，则后排首板及跟风将面临快速淘汰，资金可能转向机器人或电力；第二组：机器人方向的<a>强度确认</a>，恒锋工具是否维持强溢价，绿的谐波能否守住重心，五洲新春、巨轮智能等是否出现亏钱效应，若机器人内部轮动有序，则可能承接AI分流资金并强化主线地位；结构信号是<a>半导体与科创50的止跌</a>，若半导体核心股出现缩量企稳或资金小幅回流，将为整体情绪提供稳定基础，否则指数端压力将抑制题材炒作高度。此外，电力方向大唐发电的4板瓶颈也是情绪高度的试金石，需观察换手与封单变化。</p></p>
+<p>待AI生成。</p>
 <h2>12. 股票池更新</h2>
 <div class="table-wrap"><table>
 <thead><tr><td data-label="动作">动作</td><td data-label="摘要">摘要</td></tr></thead>
@@ -386,7 +430,7 @@ td::before { content:attr(data-label); color:var(--accent2); font-weight:800; fo
 </tbody></table></div>
 <h2>13. 市场风险与参与边界</h2>
 <p>今天涨停数量很大（98只），但这反而要求次日只看前排和容量承接，不能把普涨后排当作确定延续。AI算力/硬件/通信链若容量票转弱，主线要降级；机器人/工业母机/高端制造、电力/电网/新能源如果只剩单票强而无新前排，应按活口处理；ST链只看情绪温度，不做主线外推；炸板和跌停没有消失，后排追涨风险仍高。</p>
-<div class="footer">自动生成于 2026-05-08 16:09:14 · 耗时 3.5s · 仅供手机查看与分享</div>
+<div class="footer">自动生成于 2026-05-08 16:33:31 · 耗时 3.9s · 仅供手机查看与分享</div>
 </main>
 </body>
 </html>
