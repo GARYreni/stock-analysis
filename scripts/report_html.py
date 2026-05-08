@@ -260,7 +260,8 @@ def _section_summary_cards(data: dict) -> str:
         cards.append(f'<div class="summary-card"><span>观察</span><b>{t["name"]}</b><em>{detail}</em></div>')
     if len(sub_theme) >= 2:
         t = sub_theme[1]
-        detail = f"板块量价：板块资金源未完全覆盖该方向，本方向不把板块资金作为唯一升格证据。"
+        fund = t.get('board_fund', '') or '资金数据未覆盖'
+        detail = f"板块量价：{fund}，高强/近涨停{t.get('member_count', 0)}只，高分歧。"
         cards.append(f'<div class="summary-card"><span>观察</span><b>{t["name"]}</b><em>{detail}</em></div>')
 
     # 风险卡片
@@ -456,7 +457,13 @@ def _section_themes(data: dict) -> str:
         # 板块量价描述
         board_fund = theme.get("board_fund", "资金数据未覆盖")
         board_pct = theme.get("board_pct", "")
-        board_desc = f"{'板块资金数据未覆盖' if not board_fund else f'净流入{board_fund}'}，高强/近涨停{member_count}只，高分歧。"
+        if not board_fund:
+            fund_label = "板块资金数据未覆盖"
+        elif board_fund.startswith('-'):
+            fund_label = f"净流出{board_fund[1:]}"
+        else:
+            fund_label = f"净流入{board_fund}"
+        board_desc = f"{fund_label}，高强/近涨停{member_count}只，高分歧。"
 
         cls_map = {"主线":"main", "次主线":"sub", "活口":"alive", "情绪":"other", "待定":"other"}
         cls = cls_map.get(level, "alive")
