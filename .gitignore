@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pkl
+/tmp/
+*.tar.gz
+*.zip
+.DS_Store
+*.html
+*.md
+!SKILL.md
+!README.md
